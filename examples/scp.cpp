@@ -48,8 +48,10 @@ int main(int argc, char* argv[]) {
     session.handshake();
 
     const auto fingerprint = session.hostkey_hash();
-    std::cerr << "Fingerprint: ";
-    write_hex_string(std::cerr, fingerprint);
+
+    std::cout << "Fingerprint: ";
+    write_hex_string(std::cout, fingerprint);
+    std::cout << "\n";
 
     const auto homedir = async_ssh::utils::get_home_dir();
     const auto username = async_ssh::utils::get_username();
