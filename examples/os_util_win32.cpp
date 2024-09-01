@@ -5,6 +5,7 @@
 #include <windows.h>
 
 #include <array>
+#include <string_view>
 
 namespace async_ssh::utils {
   std::filesystem::path get_home_dir() {
@@ -14,7 +15,7 @@ namespace async_ssh::utils {
     auto size = static_cast<DWORD>(userdir.size());
     GetUserProfileDirectoryA(handle, userdir.data(), &size);
     CloseHandle(handle);
-    return {userdir.data(), static_cast<size_t>(size)};
+    return std::string_view{userdir.data(), static_cast<size_t>(size)};
   }
 
   std::string get_username() {
