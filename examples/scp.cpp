@@ -17,7 +17,7 @@ namespace {
   void write_hex_string(std::ostream& oss, std::string_view str) {
     auto flags = oss.flags();
     for (const auto c : str) {
-      oss << std::hex << static_cast<int>(0xFF & c) << " ";
+      oss << std::hex << (0xFF & c) << " ";
     }
     oss.flags(flags);
     oss << "\n";
@@ -113,7 +113,7 @@ int main(int argc, char* argv[]) {
   */
   auto [channel, fileinfo] = session.scp_recv(scppath);
   size_t total_read = 0;
-  while (total_read < fileinfo.st_size) {
+  while (total_read < static_cast<size_t>(fileinfo.st_size)) {
     std::array<char, 1024> mem{};
     auto read = channel.read_some(boost::asio::buffer(mem));
     if (read > 0) {

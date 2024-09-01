@@ -16,8 +16,8 @@ namespace api = detail::libssh2_api;
 
 class channel {
 public:
-  channel(LIBSSH2_CHANNEL* channel, LIBSSH2_SESSION* session)
-    : channel_(channel, api::libssh2_channel_free) {
+  channel(LIBSSH2_CHANNEL* libssh2_channel, LIBSSH2_SESSION* session)
+    : channel_(libssh2_channel, api::libssh2_channel_free) {
     if (!channel_) {
       throw std::runtime_error("Unable to open a channel: " + std::to_string(libssh2_session_last_errno(session)));
     }
