@@ -4,14 +4,14 @@
 
 #include <boost/asio.hpp>
 
-#include <unistd.h>
-#include <pwd.h>
-#include <termios.h>
-
+#include <cstdlib>
+#include <exception>
 #include <filesystem>
 #include <iostream>
 #include <string>
 #include <string_view>
+
+#include "os_util.hpp"
 
 namespace {
   void write_hex_string(std::ostream& oss, std::string_view str) {
@@ -23,42 +23,10 @@ namespace {
     oss << "\n";
   }
 
-  std::string_view get_home_dir() {
-    return getpwuid(getuid())->pw_dir;
-  }
-
-  std::string_view get_username() {
-    return getlogin();
-  }
-
-  void stdin_echo(bool enable) {
-#ifdef WIN32
-    HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
-    DWORD mode;
-    GetConsoleMode(hStdin, &mode);
-    if(enable) {
-      mode |= ENABLE_ECHO_INPUT;
-    } else {
-      mode &= ~ENABLE_ECHO_INPUT;
-    }
-    SetConsoleMode(hStdin, mode);
-#else
-    termios tty{};
-    tcgetattr(STDIN_FILENO, &tty);
-    if(enable) {
-      tty.c_lflag |= ECHO;
-    } else {
-      tty.c_lflag &= ~ECHO;
-    }
-    tcsetattr(STDIN_FILENO, TCSANOW, &tty);
-#endif
-  };
-
   std::string read_password() {
+    async_ssh::utils::stdin_echo_disabler disable_echo;
     std::string password;
-    stdin_echo(false);
     std::cin >> password;
-    stdin_echo(true);
     return password;
   }
 } // namespace
@@ -84,12 +52,15 @@ int main(int argc, char* argv[]) {
   std::cerr << "Fingerprint: ";
   write_hex_string(std::cerr, fingerprint);
 
-  const auto pubkey = std::filesystem::path{get_home_dir()} / ".ssh" / "id_rsa.pub";
-  const auto privkey = std::filesystem::path{get_home_dir()} / ".ssh" / "id_rsa";
+  const auto homedir = async_ssh::utils::get_home_dir();
+  const auto username = async_ssh::utils::get_username();
+
+  const auto pubkey = homedir / ".ssh" / "id_rsa.pub";
+  const auto privkey = homedir / ".ssh" / "id_rsa";
   bool authenticated = false;
   if (std::filesystem::exists(pubkey) && std::filesystem::exists(privkey)) {
     try {
-      session.public_key_auth(get_username(), pubkey, privkey);
+      session.public_key_auth(username, pubkey, privkey);
       authenticated = true;
     } catch (const std::exception& ex) {
       std::cerr << "Authentication by public key failed.\n";
@@ -97,9 +68,9 @@ int main(int argc, char* argv[]) {
   }
 
   if (!authenticated) {
-    std::cout << get_username() << "@" << host << "'s password: ";
+    std::cout << username << "@" << host << "'s password: ";
     const auto password = read_password();
-    session.password_auth(get_username(), password);
+    session.password_auth(username, password);
   }
 
   auto [channel, fileinfo] = session.scp_recv(scppath);
