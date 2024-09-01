@@ -58,12 +58,13 @@ int main(int argc, char* argv[]) {
 
     const auto pubkey = homedir / ".ssh" / "id_rsa.pub";
     const auto privkey = homedir / ".ssh" / "id_rsa";
+
     bool authenticated = false;
     if (std::filesystem::exists(pubkey) && std::filesystem::exists(privkey)) {
       try {
         session.public_key_auth(username, pubkey, privkey);
         authenticated = true;
-      } catch (const std::exception& ex) {
+      } catch (const std::exception&) {
         std::cerr << "Authentication by public key failed.\n";
       }
     }
