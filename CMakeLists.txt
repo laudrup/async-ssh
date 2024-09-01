@@ -24,12 +24,12 @@ add_library(async_ssh INTERFACE)
 add_library(Async::SSH ALIAS async_ssh)
 
 set_property(
-  TARGET async-ssh PROPERTY
+  TARGET async_ssh PROPERTY
   EXPORT_NAME SSH
 )
 
 target_include_directories(
-  async-ssh ${warning_guard}
+  async_ssh ${warning_guard}
   INTERFACE
   "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
 )
