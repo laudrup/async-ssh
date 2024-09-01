@@ -7,6 +7,8 @@ A C++17 SSH client using Asio and libssh2
 Not much has been implemented yet. Mostly putting this up to ensure
 the basic infrastructure is ready.
 
+[![Unittest](https://github.com/laudrup/async-ssh/actions/workflows/unittest.yml/badge.svg?branch=master)](https://github.com/laudrup/async-ssh/actions)
+
 # Building
 
 ```
