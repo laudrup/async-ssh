@@ -37,52 +37,55 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  std::string_view host{argv[1]};
-  std::filesystem::path scppath{argv[2]};
+  try {
+    std::string_view host{argv[1]};
+    std::filesystem::path scppath{argv[2]};
 
-  boost::asio::io_context io_context;
-  boost::asio::ip::tcp::resolver resolver(io_context);
-  boost::asio::ip::tcp::resolver::results_type endpoints = resolver.resolve(host, "ssh");
-  async_ssh::session<boost::asio::ip::tcp::socket> session(io_context);
-  boost::asio::connect(session.socket(), endpoints);
+    boost::asio::io_context io_context;
+    boost::asio::ip::tcp::resolver resolver(io_context);
+    boost::asio::ip::tcp::resolver::results_type endpoints = resolver.resolve(host, "ssh");
+    async_ssh::session<boost::asio::ip::tcp::socket> session(io_context);
+    boost::asio::connect(session.socket(), endpoints);
 
-  session.handshake();
+    session.handshake();
 
-  const auto fingerprint = session.hostkey_hash();
-  std::cerr << "Fingerprint: ";
-  write_hex_string(std::cerr, fingerprint);
+    const auto fingerprint = session.hostkey_hash();
+    std::cerr << "Fingerprint: ";
+    write_hex_string(std::cerr, fingerprint);
 
-  const auto homedir = async_ssh::utils::get_home_dir();
-  const auto username = async_ssh::utils::get_username();
+    const auto homedir = async_ssh::utils::get_home_dir();
+    const auto username = async_ssh::utils::get_username();
 
-  const auto pubkey = homedir / ".ssh" / "id_rsa.pub";
-  const auto privkey = homedir / ".ssh" / "id_rsa";
-  bool authenticated = false;
-  if (std::filesystem::exists(pubkey) && std::filesystem::exists(privkey)) {
-    try {
-      session.public_key_auth(username, pubkey, privkey);
-      authenticated = true;
-    } catch (const std::exception& ex) {
-      std::cerr << "Authentication by public key failed.\n";
+    const auto pubkey = homedir / ".ssh" / "id_rsa.pub";
+    const auto privkey = homedir / ".ssh" / "id_rsa";
+    bool authenticated = false;
+    if (std::filesystem::exists(pubkey) && std::filesystem::exists(privkey)) {
+      try {
+        session.public_key_auth(username, pubkey, privkey);
+        authenticated = true;
+      } catch (const std::exception& ex) {
+        std::cerr << "Authentication by public key failed.\n";
+      }
     }
-  }
 
-  if (!authenticated) {
-    std::cout << username << "@" << host << "'s password: ";
-    const auto password = read_password();
-    session.password_auth(username, password);
-  }
+    if (!authenticated) {
+      std::cout << username << "@" << host << "'s password: ";
+      const auto password = read_password();
+      session.password_auth(username, password);
+    }
 
-  auto [channel, fileinfo] = session.scp_recv(scppath);
-  size_t total_read = 0;
-  while (total_read < static_cast<size_t>(fileinfo.st_size)) {
-    std::array<char, 1024> mem{};
-    auto read = channel.read_some(boost::asio::buffer(mem));
-    if (read > 0) {
+    auto [channel, fileinfo] = session.scp_recv(scppath);
+    size_t total_read = 0;
+    while (total_read < static_cast<size_t>(fileinfo.st_size)) {
+      std::array<char, 1024> mem{};
+      auto read = channel.read_some(boost::asio::buffer(mem));
       std::cout << std::string(mem.data(), mem.size());
+      total_read += read;
     }
-    total_read += read;
-  }
 
-  return 0;
+    return EXIT_SUCCESS;
+  } catch (const std::exception& ex) {
+    std::cerr << "Failed: " << ex.what() << "\n";
+    return EXIT_FAILURE;
+  }
 }
