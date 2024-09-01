@@ -69,9 +69,9 @@ public:
   void public_key_auth(std::string_view username, const std::filesystem::path& pubkey, const std::filesystem::path& privkey) {
     const auto rc = api::libssh2_userauth_publickey_fromfile_ex(handle(),
                                                                 username.data(),
-                                                                username.size(),
-                                                                pubkey.c_str(),
-                                                                privkey.c_str(),
+                                                                static_cast<unsigned int>(username.size()),
+                                                                pubkey.string().c_str(),
+                                                                privkey.string().c_str(),
                                                                 nullptr);
     if (rc != 0) {
       throw std::runtime_error("Failed public key auth: " + std::to_string(rc));
@@ -81,9 +81,9 @@ public:
   void password_auth(std::string_view username, std::string_view password) {
     const auto rc = api::libssh2_userauth_password_ex(handle(),
                                                       username.data(),
-                                                      username.size(),
+                                                      static_cast<unsigned int>(username.size()),
                                                       password.data(),
-                                                      password.size(),
+                                                      static_cast<unsigned int>(password.size()),
                                                       nullptr);
     if (rc != 0) {
       throw std::runtime_error("Failed password auth: " + std::to_string(rc));
@@ -96,7 +96,7 @@ public:
 
   std::tuple<async_ssh::channel, libssh2_struct_stat> scp_recv(const std::filesystem::path& path) {
     libssh2_struct_stat fileinfo;
-    return {channel{libssh2_scp_recv2(handle(), path.c_str(), &fileinfo), handle()}, fileinfo};
+    return {channel{libssh2_scp_recv2(handle(), path.string().c_str(), &fileinfo), handle()}, fileinfo};
   }
 
 private:
