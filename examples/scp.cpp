@@ -102,15 +102,6 @@ int main(int argc, char* argv[]) {
     session.password_auth(get_username(), password);
   }
 
-  /* Request a file via SCP */
-  //libssh2_struct_stat fileinfo;
-  //async_ssh::channel channel(libssh2_scp_recv2(session.handle(), scppath.c_str(), &fileinfo), session.handle());
-  /*
-  fprintf(stdout, "Links\tUid\tGid\tSize\tMode\tName\n");
-  fprintf(stdout, "%u\t%u\t%u\t%u\t%u\t%s\n", fileinfo.st_nlink,
-          fileinfo.st_uid, fileinfo.st_gid, fileinfo.st_size, fileinfo.st_mode,
-          scppath.c_str());
-  */
   auto [channel, fileinfo] = session.scp_recv(scppath);
   size_t total_read = 0;
   while (total_read < static_cast<size_t>(fileinfo.st_size)) {
