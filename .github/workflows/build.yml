@@ -24,7 +24,8 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get -yq install \
-        libssh2-1-dev
+        libssh2-1-dev \
+        libboost-all-dev
     - name: Configure
       run: cmake -B build
     - name: Build
