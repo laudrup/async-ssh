@@ -82,12 +82,35 @@ jobs:
         shell: bash
 
     steps:
+    - name: Checkout libssh2
+      uses: actions/checkout@v4
+      with:
+        repository: libssh2/libssh2
+        ref: libssh2-1.11.0
+        path: libssh2
+    - name: Build and install libssh2
+      working-directory: libssh2
+      run: |
+        cmake -DCRYPTO_BACKEND="WinCNG" -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=OFF -Bbuild
+        cmake --build build
+        cmake --install build --config Debug --prefix=c:/libssh2
+    - name: Install boost
+      uses: MarkusJx/install-boost@v2.4.5
+      id: install-boost
+      with:
+        toolset: msvc
+        platform_version: 2022
+        boost_version: 1.84.0
+        boost_install_dir: c:/boost
     - name: Checkout
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Configure
-      run: cmake -B build
+      env:
+        BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
+      run: |
+        cmake -DLibssh2_ROOT=c:/libssh2 -B build
     - name: Build
       run: cmake --build build/
     - name: Run tests
