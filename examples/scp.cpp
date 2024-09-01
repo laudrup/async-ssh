@@ -1,7 +1,5 @@
 #include <async_ssh.hpp>
 
-#include <libssh2.h>
-
 #include <boost/asio.hpp>
 
 #include <cstdlib>
