@@ -26,6 +26,8 @@ jobs:
         sudo apt-get -yq install \
         libssh2-1-dev \
         libboost-all-dev
+    - name: List tags
+      run: git tag -l
     - name: Configure
       run: cmake -B build
     - name: Build
