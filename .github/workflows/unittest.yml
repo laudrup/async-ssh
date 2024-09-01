@@ -7,6 +7,7 @@ jobs:
       fail-fast: false
       matrix:
         platform: [ubuntu-latest]
+        compiler: [gcc, clang]
 
     runs-on: ${{ matrix.platform }}
 
@@ -28,8 +29,11 @@ jobs:
         sudo apt-get -yq install \
         libssh2-1-dev \
         libboost-all-dev
-    - name: List tags
-      run: git tag -l
+    - name: Set conditional environment variables
+      if: matrix.compiler == 'clang'
+      run: |
+        echo "CC=clang" >> $GITHUB_ENV
+        echo "CXX=clang++" >> $GITHUB_ENV
     - name: Configure
       run: cmake -B build
     - name: Build
