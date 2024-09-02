@@ -15,9 +15,24 @@ namespace async_ssh {
 
 namespace api = detail::libssh2_api;
 
+/** The session class represents an SSH session that can be used to
+ * open one or more SSH channels.
+ *
+ * @tparam SocketType The type representing the socket used for communication with a remote host.
+ * Typically a [boost::asio::ip::tcp::socket](https://www.boost.org/doc/libs/release/doc/html/boost_asio/reference/ip__tcp/socket.html)
+ */
 template <class SocketType>
 class session {
 public:
+
+  /** Construct a session.
+   *
+   * This constructor creates a session and initialises the underlying
+   * socket object.
+   *
+   *  @param arg The argument to be passed to initialise the
+   *  underlying socket object. Typically a [boost::asio::io_context](https://www.boost.org/doc/libs/release/doc/html/boost_asio/reference/io_context.html)
+   */
   template <class Arg>
   explicit session(Arg&& arg)
     : socket_(std::forward<Arg>(arg))
