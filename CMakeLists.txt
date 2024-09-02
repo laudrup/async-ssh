@@ -47,7 +47,7 @@ endif()
 
 option(BUILD_TESTING "Enable building tests" ${PROJECT_IS_TOP_LEVEL})
 option(BUILD_EXAMPLES "Enable building examples" ${PROJECT_IS_TOP_LEVEL})
-option(BUILD_DOCUMENTATION "Enable building documentation" ${PROJECT_IS_TOP_LEVEL})
+option(BUILD_DOCUMENTATION "Enable building documentation" OFF)
 option(WARNINGS_AS_ERRORS "Build with warnings as errors" ${PROJECT_IS_TOP_LEVEL})
 
 if(BUILD_TESTING)

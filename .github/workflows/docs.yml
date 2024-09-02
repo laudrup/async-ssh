@@ -30,7 +30,7 @@ jobs:
         sphinx_jinja \
         sphinxcontrib_jquery
     - name: Configure build system
-      run: mkdir build && cmake -Bbuild -H.
+      run: cmake -DBUILD_DOCUMENTATION=ON -B build
     - name: Build documentation
       run: cmake --build build/ --target doc
     - name: Copy HTML documentation to source package
