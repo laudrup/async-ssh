@@ -7,7 +7,9 @@ A C++17 SSH client using Asio and libssh2
 Not much has been implemented yet. Mostly putting this up to ensure
 the basic infrastructure is ready.
 
-[![Unittest](https://github.com/laudrup/async-ssh/actions/workflows/unittest.yml/badge.svg?branch=master)](https://github.com/laudrup/async-ssh/actions)
+## Build status
+
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/laudrup/async-ssh/linux.yml?branch=master&logo=linux&label=linux)](https://github.com/laudrup/async-ssh/actions/workflows/linux.yml?branch=master) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/laudrup/async-ssh/macos.yml?branch=master&logo=apple&label=apple)](https://github.com/laudrup/async-ssh/actions/workflows/apple.yml?branch=master) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/laudrup/async-ssh/windows.yml?branch=master&logo=windows&label=windows)](https://github.com/laudrup/async-ssh/actions/workflows/windows.yml?branch=master)
 
 # Building
 

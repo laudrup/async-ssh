@@ -1,0 +1,44 @@
+on: [push]
+name: linux
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Install APT packages
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo apt-get update
+        sudo apt-get -yq install \
+        libssh2-1-dev \
+        libboost-all-dev
+    - name: Set conditional environment variables
+      if: matrix.compiler == 'clang'
+      run: |
+        echo "CC=clang" >> $GITHUB_ENV
+        echo "CXX=clang++" >> $GITHUB_ENV
+    - name: Configure
+      run: cmake -B build
+    - name: Build
+      run: cmake --build build/
+    - name: Run tests
+      working-directory: build
+      run: ctest
+      env:
+        CTEST_OUTPUT_ON_FAILURE: True
+
