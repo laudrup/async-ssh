@@ -5,6 +5,7 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     name: Generate and publish release and documentation
+    if: github.repository_owner == 'laudrup'
     steps:
     - name: Checkout
       uses: actions/checkout@v4
