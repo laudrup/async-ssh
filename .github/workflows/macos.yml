@@ -19,7 +19,6 @@ jobs:
         fetch-depth: 0
     - name: Install homebrew packages
       run: |
-        brew install libssh2
         brew install boost
     - name: Configure
       run: cmake -B build
