@@ -2,6 +2,28 @@ cmake_minimum_required(VERSION 3.14)
 
 project(async-ssh-tests LANGUAGES CXX)
 
+Include(FetchContent)
+
+Set(FETCHCONTENT_QUIET FALSE)
+
+FetchContent_Declare(
+  Catch2
+  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+  GIT_TAG        v3.4.0
+  GIT_PROGRESS   TRUE
+)
+
+FetchContent_MakeAvailable(Catch2)
+
+FetchContent_Declare(
+  Trompeloeil
+  GIT_REPOSITORY https://github.com/rollbear/trompeloeil.git
+  GIT_TAG        v48
+  GIT_PROGRESS   TRUE
+)
+
+FetchContent_MakeAvailable(Trompeloeil)
+
 include(../cmake/project-is-top-level.cmake)
 include(../cmake/compiler-warnings.cmake)
 
@@ -11,11 +33,18 @@ if(PROJECT_IS_TOP_LEVEL)
 endif()
 
 add_executable(unittest
+  libssh2_api_mock.cpp
+  test_scp.cpp
   unittest.cpp
 )
 target_link_libraries(unittest PRIVATE
   Async::SSH
+  Catch2::Catch2
+  trompeloeil
   compiler_warnings
+)
+target_compile_definitions(unittest PRIVATE
+  ASYNC_SSH_MOCK_LIBSSH2_API
 )
 target_compile_features(unittest PRIVATE
   cxx_std_17
