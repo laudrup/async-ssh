@@ -9,7 +9,7 @@ the basic infrastructure is ready.
 
 ## Build status
 
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/laudrup/async-ssh/linux.yml?branch=master&logo=linux&label=linux)](https://github.com/laudrup/async-ssh/actions/workflows/linux.yml?branch=master) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/laudrup/async-ssh/macos.yml?branch=master&logo=apple&label=macos)](https://github.com/laudrup/async-ssh/actions/workflows/apple.yml?branch=master) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/laudrup/async-ssh/windows.yml?branch=master&logo=windows&label=windows)](https://github.com/laudrup/async-ssh/actions/workflows/windows.yml?branch=master)
+[![Linux Build Status](https://img.shields.io/github/actions/workflow/status/laudrup/async-ssh/linux.yml?branch=master&logo=linux&label=Linux)](https://github.com/laudrup/async-ssh/actions/workflows/linux.yml?branch=master) [![MacOS Build Status](https://img.shields.io/github/actions/workflow/status/laudrup/async-ssh/macos.yml?branch=master&logo=apple&label=MacOs)](https://github.com/laudrup/async-ssh/actions/workflows/apple.yml?branch=master) [![Windows Build Status](https://img.shields.io/github/actions/workflow/status/laudrup/async-ssh/windows.yml?branch=master&logo=windows&label=Windows)](https://github.com/laudrup/async-ssh/actions/workflows/windows.yml?branch=master) [![Documentation Build Status](https://img.shields.io/github/actions/workflow/status/laudrup/async-ssh/docs.yml?branch=master&logo=githubpages&label=Documentation)](https://laudrup.github.io/async-ssh/)
 
 # Building
 
