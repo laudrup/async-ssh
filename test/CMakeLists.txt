@@ -35,6 +35,7 @@ endif()
 add_executable(unittest
   libssh2_api_mock.cpp
   test_session.cpp
+  test_error_codes.cpp
   unittest.cpp
 )
 target_link_libraries(unittest PRIVATE
