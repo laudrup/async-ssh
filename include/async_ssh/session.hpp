@@ -3,12 +3,14 @@
 
 #include <async_ssh/detail/libssh2_init.hpp>
 #include <async_ssh/detail/libssh2_api.hpp>
-#include "async_ssh/channel.hpp"
+#include <async_ssh/channel.hpp>
+#include <async_ssh/detail/error.hpp>
 
 #include <filesystem>
 #include <memory>
 #include <stdexcept>
 #include <string_view>
+#include <system_error>
 #include <type_traits>
 
 namespace async_ssh {
@@ -54,23 +56,64 @@ public:
     }
   }
 
+  /** Get a reference to the socket being used for communication with
+   * the server.
+   *
+   * @return A reference to the socket. Ownership is not transferred
+   * to the caller.
+   */
   const SocketType& socket() const {
     return socket_;
   }
 
+  /** Get a reference to the socket being used for communication with
+   * the server.
+   *
+   * @return A reference to the socket. Ownership is not transferred
+   * to the caller.
+   */
   SocketType& socket() {
     return socket_;
   }
 
+  /** Get a pointer to the libssh2 session being used by this object.
+   *
+   * @see [libssh2 docs](https://libssh2.org/docs.html)
+   *
+   * @return A pointer to the libssh2 session. Ownership is not
+   * transferred to the caller.
+   */
   LIBSSH2_SESSION* handle() const {
     return session_.get();
   }
 
-  void handshake() {
+  /** Perform the SSH handshake.
+   *
+   * This will trade welcome banners, exchange keys, and setup crypto,
+   * compression, and MAC layers
+   *
+   * @see [libssh2_session_handshake](https://libssh2.org/libssh2_session_handshake.html)
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   */
+  void handshake(std::error_code& ec) {
     const auto rc = api::libssh2_session_handshake(handle(), socket_.native_handle());
-    if (rc != 0) {
-      throw std::runtime_error("Failure establishing SSH session: " + std::to_string(rc));
-    }
+    ec = make_error_code(rc);
+  }
+
+  /** Perform the SSH handshake.
+   *
+   * This will trade welcome banners, exchange keys, and setup crypto,
+   * compression, and MAC layers
+   *
+   * @see [libssh2_session_handshake](https://libssh2.org/libssh2_session_handshake.html)
+   *
+   * @throws std::system_error Thrown on failure.
+   */
+  void handshake() {
+    std::error_code ec;
+    handshake(ec);
+    detail::throw_on_error(ec);
   }
 
   std::string_view hostkey_hash() const {
