@@ -92,6 +92,78 @@
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9async_ssh7session6socketEv">
+<span id="_CPPv3NK9async_ssh7session6socketEv"></span><span id="_CPPv2NK9async_ssh7session6socketEv"></span><span id="async_ssh::session::socketC"></span><span class="target" id="classasync__ssh_1_1session_1a57542aba31881def60a3fb89674fabd3"></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN9async_ssh7sessionE" title="async_ssh::session::SocketType"><span class="n"><span class="pre">SocketType</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">socket</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9async_ssh7session6socketEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Get a reference to the socket being used for communication with the server. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A reference to the socket. Ownership is not transferred to the caller. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9async_ssh7session6socketEv">
+<span id="_CPPv3N9async_ssh7session6socketEv"></span><span id="_CPPv2N9async_ssh7session6socketEv"></span><span id="async_ssh::session::socket"></span><span class="target" id="classasync__ssh_1_1session_1afea0d1f76a4cea170a6313515f9ab00c"></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN9async_ssh7sessionE" title="async_ssh::session::SocketType"><span class="n"><span class="pre">SocketType</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">socket</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9async_ssh7session6socketEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Get a reference to the socket being used for communication with the server. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A reference to the socket. Ownership is not transferred to the caller. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9async_ssh7session6handleEv">
+<span id="_CPPv3NK9async_ssh7session6handleEv"></span><span id="_CPPv2NK9async_ssh7session6handleEv"></span><span id="async_ssh::session::handleC"></span><span class="target" id="classasync__ssh_1_1session_1a953515f4e0a472b5a717dc36330897db"></span><span class="w"> </span><span class="n"><span class="pre">LIBSSH2_SESSION</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">handle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9async_ssh7session6handleEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Get a pointer to the libssh2 session being used by this object. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://libssh2.org/docs.html">libssh2 docs</a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A pointer to the libssh2 session. Ownership is not transferred to the caller. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9async_ssh7session9handshakeERNSt10error_codeE">
+<span id="_CPPv3N9async_ssh7session9handshakeERNSt10error_codeE"></span><span id="_CPPv2N9async_ssh7session9handshakeERNSt10error_codeE"></span><span id="async_ssh::session::handshake__std::error_codeR"></span><span class="target" id="classasync__ssh_1_1session_1a1bd906ed407f843808a86691acfa5ba6"></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">handshake</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">error_code</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ec</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9async_ssh7session9handshakeERNSt10error_codeE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Perform the SSH handshake. </p>
+<p>This will trade welcome banners, exchange keys, and setup crypto, compression, and MAC layers</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://libssh2.org/libssh2_session_handshake.html">libssh2_session_handshake</a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ec</strong> – Set to indicate what error occurred, if any. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9async_ssh7session9handshakeEv">
+<span id="_CPPv3N9async_ssh7session9handshakeEv"></span><span id="_CPPv2N9async_ssh7session9handshakeEv"></span><span id="async_ssh::session::handshake"></span><span class="target" id="classasync__ssh_1_1session_1a4c11ec79af473a43a194dca3da8c1871"></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">handshake</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9async_ssh7session9handshakeEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Perform the SSH handshake. </p>
+<p>This will trade welcome banners, exchange keys, and setup crypto, compression, and MAC layers</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://libssh2.org/libssh2_session_handshake.html">libssh2_session_handshake</a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">system_error</span></span></span> – Thrown on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </dd></dl>
 
