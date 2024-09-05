@@ -45,6 +45,8 @@ int main(int argc, char* argv[]) {
     async_ssh::session<boost::asio::ip::tcp::socket> session(io_context);
     boost::asio::connect(session.socket(), endpoints);
 
+    // SSH handshake is required before authentication and any other
+    // operations can start
     session.handshake();
 
     const auto fingerprint = session.hostkey_hash();
