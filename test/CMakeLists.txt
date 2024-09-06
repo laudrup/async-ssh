@@ -5,7 +5,8 @@ project(async-ssh-tests LANGUAGES CXX)
 Include(FetchContent)
 
 find_package(Patch)
-Set(FETCHCONTENT_QUIET FALSE)
+set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
+set(FETCHCONTENT_QUIET FALSE)
 
 FetchContent_Declare(
   Catch2
