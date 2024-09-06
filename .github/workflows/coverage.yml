@@ -1,0 +1,43 @@
+on: [push]
+name: coverage
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    name: Generate and upload code coverage
+    if: github.repository_owner == 'laudrup'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Install APT package
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo apt-get update
+        sudo apt-get -yq install \
+        libssh2-1-dev \
+        libboost-all-dev \
+        lcov
+    - name: Configure
+      run: cmake -DENABLE_COVERAGE=ON -B build
+    - name: Build
+      run: cmake --build build
+    - name: Test
+      working-directory: build
+      run: ctest --output-on-failure --no-tests=error
+    - name: Generate Coverage Report
+      run: |
+        lcov --capture --output-file coverage.info --directory build
+        lcov --remove coverage.info '**/test/*' --output-file coverage.info
+    - name: Submit to codecov.io
+      uses: codecov/codecov-action@v4
+      with:
+        verbose: true
+        file: coverage.info
+        disable_search: true
+        fail_ci_if_error: true
+        plugin: noop
+        token: ${{ secrets.CODECOV_TOKEN }}

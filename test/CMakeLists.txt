@@ -53,4 +53,10 @@ target_compile_features(unittest PRIVATE
   cxx_std_17
 )
 
+if(ENABLE_COVERAGE)
+  target_link_libraries(unittest PRIVATE
+    coverage
+  )
+endif()
+
 add_test(NAME unittest COMMAND unittest)
