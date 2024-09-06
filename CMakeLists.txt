@@ -19,6 +19,7 @@ find_package(Boost CONFIG REQUIRED)
 
 include(cmake/project-is-top-level.cmake)
 include(cmake/variables.cmake)
+include(cmake/compiler-warnings.cmake)
 
 add_library(async_ssh INTERFACE)
 add_library(Async::SSH ALIAS async_ssh)

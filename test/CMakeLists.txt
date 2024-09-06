@@ -27,7 +27,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Trompeloeil)
 
 include(../cmake/project-is-top-level.cmake)
-include(../cmake/compiler-warnings.cmake)
 
 if(PROJECT_IS_TOP_LEVEL)
   find_package(async-ssh REQUIRED)
