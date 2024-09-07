@@ -137,7 +137,7 @@ public:
   void handshake() {
     std::error_code ec;
     handshake(ec);
-    detail::throw_on_error(ec);
+    detail::throw_on_error(ec, "handshake");
   }
 
   /** Return a hash of the remote host's key.
@@ -173,7 +173,7 @@ public:
   std::string_view hostkey_hash(hostkey_hash_type hash_type) const {
     std::error_code ec;
     auto fingerprint = hostkey_hash(hash_type, ec);
-    detail::throw_on_error(ec);
+    detail::throw_on_error(ec, "hostkey_hash");
     return fingerprint;
   }
 
