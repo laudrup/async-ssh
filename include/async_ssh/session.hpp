@@ -116,9 +116,9 @@ public:
    * This will trade welcome banners, exchange keys, and setup crypto,
    * compression, and MAC layers.
    *
-   * @see [libssh2_session_handshake](https://libssh2.org/libssh2_session_handshake.html)
-   *
    * @param ec Set to indicate what error occurred, if any.
+   *
+   * @see [libssh2_session_handshake](https://libssh2.org/libssh2_session_handshake.html)
    */
   void handshake(std::error_code& ec) {
     const auto rc = api::libssh2_session_handshake(handle(), socket_.native_handle());
@@ -130,9 +130,9 @@ public:
    * This will trade welcome banners, exchange keys, and setup crypto,
    * compression, and MAC layers.
    *
-   * @see [libssh2_session_handshake](https://libssh2.org/libssh2_session_handshake.html)
-   *
    * @throws std::system_error Thrown on failure.
+   *
+   * @see [libssh2_session_handshake](https://libssh2.org/libssh2_session_handshake.html)
    */
   void handshake() {
     std::error_code ec;
@@ -146,9 +146,9 @@ public:
    *
    * @param hash_type The @ref hostkey_hash_type type of digest to calculate.
    *
-   * @see [libssh2_hostkey_hash](https://libssh2.org/libssh2_hostkey_hash.html)
-   *
    * @param ec Set to indicate what error occurred, if any.
+   *
+   * @see [libssh2_hostkey_hash](https://libssh2.org/libssh2_hostkey_hash.html)
    */
   std::string_view hostkey_hash(hostkey_hash_type hash_type, std::error_code& ec) const {
     const auto hash = api::libssh2_hostkey_hash(handle(), static_cast<int>(hash_type));
@@ -166,9 +166,9 @@ public:
    *
    * @param hash_type The @ref hostkey_hash_type type of digest to calculate.
    *
-   * @see [libssh2_hostkey_hash](https://libssh2.org/libssh2_hostkey_hash.html)
-   *
    * @throws std::system_error Thrown on failure.
+   *
+   * @see [libssh2_hostkey_hash](https://libssh2.org/libssh2_hostkey_hash.html)
    */
   std::string_view hostkey_hash(hostkey_hash_type hash_type) const {
     std::error_code ec;
