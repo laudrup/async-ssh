@@ -16,6 +16,7 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Enumerations" href="enumerations.html" />
     <link rel="prev" title="API" href="API.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -51,6 +52,8 @@
                 
                   <li><a href="">Classes</a></li>
                 
+                  <li><a href="enumerations.html">Enumerations</a></li>
+                
               </ul>
             </li>
           
@@ -85,9 +88,17 @@
 <span id="_CPPv3I0EN9async_ssh7session7sessionERR3Arg"></span><span id="_CPPv2I0EN9async_ssh7session7sessionERR3Arg"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Arg</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classasync__ssh_1_1session_1acac943a272bbbb1508c60d885ca3a297"></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">session</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN9async_ssh7session7sessionERR3Arg" title="async_ssh::session::session::Arg"><span class="n"><span class="pre">Arg</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">arg</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN9async_ssh7session7sessionERR3Arg" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Construct a session. </p>
 <p>This constructor creates a session and initialises the underlying socket object.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://libssh2.org/libssh2_session_init.html">libssh2_session_init</a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>arg</strong> – The argument to be passed to initialise the underlying socket object. Typically a <a class="reference external" href="https://www.boost.org/doc/libs/release/doc/html/boost_asio/reference/io_context.html">boost::asio::io_context</a></p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">bad_alloc</span></span></span> – On storage allocation failures. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -134,7 +145,7 @@
 <dt class="sig sig-object cpp" id="_CPPv4N9async_ssh7session9handshakeERNSt10error_codeE">
 <span id="_CPPv3N9async_ssh7session9handshakeERNSt10error_codeE"></span><span id="_CPPv2N9async_ssh7session9handshakeERNSt10error_codeE"></span><span id="async_ssh::session::handshake__std::error_codeR"></span><span class="target" id="classasync__ssh_1_1session_1a1bd906ed407f843808a86691acfa5ba6"></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">handshake</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">error_code</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ec</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9async_ssh7session9handshakeERNSt10error_codeE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Perform the SSH handshake. </p>
-<p>This will trade welcome banners, exchange keys, and setup crypto, compression, and MAC layers</p>
+<p>This will trade welcome banners, exchange keys, and setup crypto, compression, and MAC layers.</p>
 <p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference external" href="https://libssh2.org/libssh2_session_handshake.html">libssh2_session_handshake</a></p>
@@ -151,7 +162,7 @@
 <dt class="sig sig-object cpp" id="_CPPv4N9async_ssh7session9handshakeEv">
 <span id="_CPPv3N9async_ssh7session9handshakeEv"></span><span id="_CPPv2N9async_ssh7session9handshakeEv"></span><span id="async_ssh::session::handshake"></span><span class="target" id="classasync__ssh_1_1session_1a4c11ec79af473a43a194dca3da8c1871"></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">handshake</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9async_ssh7session9handshakeEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Perform the SSH handshake. </p>
-<p>This will trade welcome banners, exchange keys, and setup crypto, compression, and MAC layers</p>
+<p>This will trade welcome banners, exchange keys, and setup crypto, compression, and MAC layers.</p>
 <p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference external" href="https://libssh2.org/libssh2_session_handshake.html">libssh2_session_handshake</a></p>
@@ -160,6 +171,46 @@
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">system_error</span></span></span> – Thrown on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9async_ssh7session12hostkey_hashE17hostkey_hash_typeRNSt10error_codeE">
+<span id="_CPPv3NK9async_ssh7session12hostkey_hashE17hostkey_hash_typeRNSt10error_codeE"></span><span id="_CPPv2NK9async_ssh7session12hostkey_hashE17hostkey_hash_typeRNSt10error_codeE"></span><span id="async_ssh::session::hostkey_hash__hostkey_hash_type.std::error_codeRC"></span><span class="target" id="classasync__ssh_1_1session_1a9a3a5e4d8d57bdced279a471b6a0c443"></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hostkey_hash</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="enumerations.html#_CPPv4N9async_ssh17hostkey_hash_typeE" title="async_ssh::hostkey_hash_type"><span class="n"><span class="pre">hostkey_hash_type</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hash_type</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">error_code</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ec</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9async_ssh7session12hostkey_hashE17hostkey_hash_typeRNSt10error_codeE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Return a hash of the remote host’s key. </p>
+<p>Returns the computed digest of the remote system’s hostkey.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://libssh2.org/libssh2_hostkey_hash.html">libssh2_hostkey_hash</a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hash_type</strong> – The <a class="reference internal" href="enumerations.html#namespaceasync__ssh_1a85e2de40b7a8a2744eacba47452daad9"><span class="std std-ref">hostkey_hash_type</span></a> type of digest to calculate.</p></li>
+<li><p><strong>ec</strong> – Set to indicate what error occurred, if any. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9async_ssh7session12hostkey_hashE17hostkey_hash_type">
+<span id="_CPPv3NK9async_ssh7session12hostkey_hashE17hostkey_hash_type"></span><span id="_CPPv2NK9async_ssh7session12hostkey_hashE17hostkey_hash_type"></span><span id="async_ssh::session::hostkey_hash__hostkey_hash_typeC"></span><span class="target" id="classasync__ssh_1_1session_1a73a4101b276af61d385d9924eca34686"></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hostkey_hash</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="enumerations.html#_CPPv4N9async_ssh17hostkey_hash_typeE" title="async_ssh::hostkey_hash_type"><span class="n"><span class="pre">hostkey_hash_type</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hash_type</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9async_ssh7session12hostkey_hashE17hostkey_hash_type" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Return a hash of the remote host’s key. </p>
+<p>Returns the computed digest of the remote system’s hostkey.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://libssh2.org/libssh2_hostkey_hash.html">libssh2_hostkey_hash</a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hash_type</strong> – The <a class="reference internal" href="enumerations.html#namespaceasync__ssh_1a85e2de40b7a8a2744eacba47452daad9"><span class="std std-ref">hostkey_hash_type</span></a> type of digest to calculate.</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">system_error</span></span></span> – Thrown on failure. </p>
 </dd>
 </dl>
 </dd></dl>
