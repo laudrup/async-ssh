@@ -153,7 +153,7 @@
 </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ec</strong> – Set to indicate what error occurred, if any. </p>
+<dd class="field-odd"><p><strong>ec</strong> – Set to indicate what error occurred, if any.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -170,7 +170,7 @@
 </p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">system_error</span></span></span> – Thrown on failure. </p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">system_error</span></span></span> – Thrown on failure.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -189,7 +189,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>hash_type</strong> – The <a class="reference internal" href="enumerations.html#namespaceasync__ssh_1a85e2de40b7a8a2744eacba47452daad9"><span class="std std-ref">hostkey_hash_type</span></a> type of digest to calculate.</p></li>
-<li><p><strong>ec</strong> – Set to indicate what error occurred, if any. </p></li>
+<li><p><strong>ec</strong> – Set to indicate what error occurred, if any.</p></li>
 </ul>
 </dd>
 </dl>
@@ -210,7 +210,93 @@
 <dd class="field-odd"><p><strong>hash_type</strong> – The <a class="reference internal" href="enumerations.html#namespaceasync__ssh_1a85e2de40b7a8a2744eacba47452daad9"><span class="std std-ref">hostkey_hash_type</span></a> type of digest to calculate.</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">system_error</span></span></span> – Thrown on failure. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">system_error</span></span></span> – Thrown on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9async_ssh7session15public_key_authENSt11string_viewERKNSt10filesystem4pathERKNSt10filesystem4pathERNSt10error_codeE">
+<span id="_CPPv3N9async_ssh7session15public_key_authENSt11string_viewERKNSt10filesystem4pathERKNSt10filesystem4pathERNSt10error_codeE"></span><span id="_CPPv2N9async_ssh7session15public_key_authENSt11string_viewERKNSt10filesystem4pathERKNSt10filesystem4pathERNSt10error_codeE"></span><span id="async_ssh::session::public_key_auth__std::string_view.std::filesystem::pathCR.std::filesystem::pathCR.std::error_codeR"></span><span class="target" id="classasync__ssh_1_1session_1abfb384132779403f18ba2c7c5059954d"></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">public_key_auth</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">username</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pubkey</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">privkey</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">error_code</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ec</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9async_ssh7session15public_key_authENSt11string_viewERKNSt10filesystem4pathERKNSt10filesystem4pathERNSt10error_codeE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Authenticate a session with a public key, read from a file. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://libssh2.org/libssh2_userauth_publickey_fromfile_ex.html">libssh2_userauth_publickey_fromfile_ex</a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> – The user to authenticate.</p></li>
+<li><p><strong>pubkey</strong> – The path to the public key to use for authenticating the user</p></li>
+<li><p><strong>privkey</strong> – The path to the private key to use for authenticating the user</p></li>
+<li><p><strong>ec</strong> – Set to indicate what error occurred, if any.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9async_ssh7session15public_key_authENSt11string_viewERKNSt10filesystem4pathERKNSt10filesystem4pathE">
+<span id="_CPPv3N9async_ssh7session15public_key_authENSt11string_viewERKNSt10filesystem4pathERKNSt10filesystem4pathE"></span><span id="_CPPv2N9async_ssh7session15public_key_authENSt11string_viewERKNSt10filesystem4pathERKNSt10filesystem4pathE"></span><span id="async_ssh::session::public_key_auth__std::string_view.std::filesystem::pathCR.std::filesystem::pathCR"></span><span class="target" id="classasync__ssh_1_1session_1a717ed9abd2baeb21bff2b93ffda0569a"></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">public_key_auth</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">username</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pubkey</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">privkey</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9async_ssh7session15public_key_authENSt11string_viewERKNSt10filesystem4pathERKNSt10filesystem4pathE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Authenticate a session with a public key, read from a file. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://libssh2.org/libssh2_userauth_publickey_fromfile_ex.html">libssh2_userauth_publickey_fromfile_ex</a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> – The user to authenticate.</p></li>
+<li><p><strong>pubkey</strong> – The path to the public key to use for authenticating the user</p></li>
+<li><p><strong>privkey</strong> – The path to the private key to use for authenticating the user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">system_error</span></span></span> – Thrown on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9async_ssh7session13password_authENSt11string_viewENSt11string_viewERNSt10error_codeE">
+<span id="_CPPv3N9async_ssh7session13password_authENSt11string_viewENSt11string_viewERNSt10error_codeE"></span><span id="_CPPv2N9async_ssh7session13password_authENSt11string_viewENSt11string_viewERNSt10error_codeE"></span><span id="async_ssh::session::password_auth__std::string_view.std::string_view.std::error_codeR"></span><span class="target" id="classasync__ssh_1_1session_1a1d30e0ce862b8ef4b7a95c631ba28f0c"></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">password_auth</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">username</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">password</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">error_code</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ec</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9async_ssh7session13password_authENSt11string_viewENSt11string_viewERNSt10error_codeE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Authenticate a session with a username and password. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://libssh2.org/libssh2_userauth_password_ex.html">libssh2_userauth_password_ex</a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> – The user to authenticate.</p></li>
+<li><p><strong>password</strong> – Password to use for authenticating username.</p></li>
+<li><p><strong>ec</strong> – Set to indicate what error occurred, if any.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9async_ssh7session13password_authENSt11string_viewENSt11string_viewE">
+<span id="_CPPv3N9async_ssh7session13password_authENSt11string_viewENSt11string_viewE"></span><span id="_CPPv2N9async_ssh7session13password_authENSt11string_viewENSt11string_viewE"></span><span id="async_ssh::session::password_auth__std::string_view.std::string_view"></span><span class="target" id="classasync__ssh_1_1session_1aa3365063b813ec8885e86eb0a95e495c"></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">password_auth</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">username</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">password</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9async_ssh7session13password_authENSt11string_viewENSt11string_viewE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Authenticate a session with a username and password. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://libssh2.org/libssh2_userauth_password_ex.html">libssh2_userauth_password_ex</a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> – The user to authenticate.</p></li>
+<li><p><strong>password</strong> – Password to use for authenticating username.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">system_error</span></span></span> – Thrown on failure.</p>
 </dd>
 </dl>
 </dd></dl>
