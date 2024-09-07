@@ -17,7 +17,7 @@
 
 using async_ssh::test::session_fixture;
 
-TEST_CASE("session init") {
+TEST_CASE("Session init") {
   boost::asio::io_context ctx;
   SECTION("No errors") {
     LIBSSH2_SESSION* ptr = reinterpret_cast<LIBSSH2_SESSION*>(0xdecafbad);
@@ -40,11 +40,11 @@ TEST_CASE("session init") {
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_session_init_ex(nullptr, nullptr, nullptr, nullptr))
       .RETURN(nullptr);
-    CHECK_THROWS_AS(async_ssh::session<async_ssh::test::socket_mock>(ctx), std::bad_alloc);
+  CHECK_THROWS_AS(async_ssh::session<async_ssh::test::socket_mock>(ctx), std::bad_alloc);
   }
 }
 
-TEST_CASE_METHOD(session_fixture, "session handshake") {
+TEST_CASE_METHOD(session_fixture, "Session handshake") {
   using async_ssh::test::error_code_matches;
   using async_ssh::make_error_code;
 
@@ -75,9 +75,44 @@ TEST_CASE_METHOD(session_fixture, "session handshake") {
 
     std::error_code ec;
     session.handshake(ec);
-    CHECK(ec == make_error_code(rc));
+    CHECK(ec == make_error_code(static_cast<async_ssh::libssh2_errors>(rc)));
     CHECK_THROWS_MATCHES(session.handshake(),
                          std::system_error,
-                         error_code_matches(make_error_code(rc)));
+                         error_code_matches(make_error_code(static_cast<async_ssh::libssh2_errors>(rc))));
+  }
+}
+
+TEST_CASE_METHOD(session_fixture, "Session hostkey hash") {
+  using async_ssh::test::error_code_matches;
+  using async_ssh::make_error_code;
+
+  SECTION("Hash key length") {
+    const char* hash = "dededededededededededededededede";
+    auto [hash_type, length] = GENERATE(table<async_ssh::hostkey_hash_type, size_t>({
+          { async_ssh::hostkey_hash_type::md5, 16 },
+          { async_ssh::hostkey_hash_type::sha1, 20 },
+          { async_ssh::hostkey_hash_type::sha256, 32 }
+    }));
+    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                 libssh2_hostkey_hash(libssh2_session_ptr, static_cast<int>(hash_type)))
+      .RETURN(hash);
+    std::error_code ec = std::make_error_code(std::io_errc::stream);
+    const auto fingerprint = session.hostkey_hash(hash_type, ec);
+    CHECK(fingerprint.size() == length);
+    CHECK_FALSE(ec);
+  }
+
+  SECTION("Hash key failure") {
+    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                 libssh2_hostkey_hash(libssh2_session_ptr, static_cast<int>(async_ssh::hostkey_hash_type::sha1)))
+      .RETURN(nullptr)
+      .TIMES(2);
+    std::error_code ec{};
+    const auto fingerprint = session.hostkey_hash(async_ssh::hostkey_hash_type::sha1, ec);
+    CHECK(ec == make_error_code(async_ssh::errors::hostkey_unavailable));
+    CHECK(fingerprint.empty());
+    CHECK_THROWS_MATCHES(session.hostkey_hash(async_ssh::hostkey_hash_type::sha1),
+                         std::system_error,
+                         error_code_matches(make_error_code(async_ssh::errors::hostkey_unavailable)));
   }
 }

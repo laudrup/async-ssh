@@ -9,6 +9,8 @@ set(DOXYFILE_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 
 set(ASYNC_SSH_PUBLIC_HEADERS
   ${DOXYGEN_INPUT_DIR}/session.hpp
+  ${DOXYGEN_INPUT_DIR}/hostkey_hash_type.hpp
+  ${DOXYGEN_INPUT_DIR}/error.hpp
 )
 
 string(REPLACE ";" " " DOXYGEN_INPUT_FILES "${ASYNC_SSH_PUBLIC_HEADERS}")
@@ -32,6 +34,7 @@ set(SPHINX_SOURCE_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/index.rst
   ${CMAKE_CURRENT_SOURCE_DIR}/API.rst
   ${CMAKE_CURRENT_SOURCE_DIR}/classes.rst
+  ${CMAKE_CURRENT_SOURCE_DIR}/enumerations.rst
 )
 
 add_custom_command(OUTPUT ${SPHINX_INDEX_FILE}

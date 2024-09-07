@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
     // operations can start
     session.handshake();
 
-    const auto fingerprint = session.hostkey_hash();
+    const auto fingerprint = session.hostkey_hash(async_ssh::hostkey_hash_type::sha1);
 
     std::cout << "Fingerprint: ";
     write_hex_string(std::cout, fingerprint);

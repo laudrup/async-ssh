@@ -5,7 +5,7 @@
 
 #include <libssh2.h>
 
-TEST_CASE("error codes") {
+TEST_CASE("Error codes") {
   auto [code, str] = GENERATE(table<int, std::string>({
     {LIBSSH2_ERROR_NONE, "None."},
     {LIBSSH2_ERROR_SOCKET_NONE, "The socket is invalid."},
@@ -61,5 +61,5 @@ TEST_CASE("error codes") {
     {LIBSSH2_ERROR_BANNER_NONE, "Unable to receive banner from remote host."}
   }));
 
-  CHECK(async_ssh::make_error_code(code).message() == str);
+  CHECK(make_error_code(static_cast<async_ssh::libssh2_errors>(code)).message() == str);
 }

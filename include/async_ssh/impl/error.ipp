@@ -6,7 +6,7 @@
 namespace async_ssh {
 namespace detail {
 
-class libssh2_category : public std::error_category {
+class libssh2_error_category : public std::error_category {
 public:
   const char* name() const noexcept override {
     return "libssh2";
@@ -124,10 +124,32 @@ public:
   }
 };
 
+class error_category : public std::error_category {
+public:
+  const char* name() const noexcept override {
+    return "async-ssh";
+  }
+
+  std::string message(int err) const override {
+    switch (static_cast<errors>(err)) {
+      case errors::none:
+        return "No error.";
+      case errors::hostkey_unavailable:
+        return "Hostkey unavailable.";
+    }
+    return "async-ssh error";
+  }
+};
+
 } // namespace detail
 
-inline const std::error_category& get_libssh2_category() {
-  static detail::libssh2_category instance;
+inline const std::error_category& libssh2_error_category() {
+  static detail::libssh2_error_category instance;
+  return instance;
+}
+
+inline const std::error_category& error_category() {
+  static detail::error_category instance;
   return instance;
 }
 

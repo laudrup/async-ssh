@@ -60,10 +60,43 @@ enum class libssh2_errors {
   randgen = LIBSSH2_ERROR_RANDGEN
 };
 
-const std::error_category& get_libssh2_category();
+const std::error_category& libssh2_error_category();
 
-inline std::error_code make_error_code(int libssh2_value) {
-  return {libssh2_value, get_libssh2_category()};
+/// Errors used by this library
+enum class errors {
+  /// No error
+  none = 0,
+
+  /// The hostkey is unavailable
+  hostkey_unavailable
+};
+
+const std::error_category& error_category();
+
+}  // namespace async_ssh
+
+namespace std {
+
+template<>
+struct is_error_code_enum<async_ssh::libssh2_errors> {
+  static const bool value = true;
+};
+
+template<>
+struct is_error_code_enum<async_ssh::errors> {
+  static const bool value = true;
+};
+
+} // namespace std
+
+namespace async_ssh {
+
+inline std::error_code make_error_code(libssh2_errors e) {
+  return {static_cast<int>(e), libssh2_error_category()};
+}
+
+inline std::error_code make_error_code(errors e) {
+  return {static_cast<int>(e), error_category()};
 }
 
 } // namespace async_ssh

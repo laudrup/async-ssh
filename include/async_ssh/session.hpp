@@ -1,9 +1,12 @@
 #ifndef ASYNC_SSH_SESSION_HPP
 #define ASYNC_SSH_SESSION_HPP
 
+#include <async_ssh/channel.hpp>
+#include <async_ssh/error.hpp>
+#include <async_ssh/hostkey_hash_type.hpp>
+
 #include <async_ssh/detail/libssh2_init.hpp>
 #include <async_ssh/detail/libssh2_api.hpp>
-#include <async_ssh/channel.hpp>
 #include <async_ssh/detail/error.hpp>
 
 #include <filesystem>
@@ -15,6 +18,22 @@
 #include <type_traits>
 
 namespace async_ssh {
+
+namespace detail {
+inline size_t hostkey_hash_length(hostkey_hash_type key_type) {
+  switch(key_type) {
+    case hostkey_hash_type::md5:
+      return 16;
+    case hostkey_hash_type::sha1:
+      return 20;
+    case hostkey_hash_type::sha256:
+      return 32;
+  }
+  return 0;
+}
+
+} // namespace detail
+
 
 namespace api = detail::libssh2_api;
 
@@ -95,7 +114,7 @@ public:
   /** Perform the SSH handshake.
    *
    * This will trade welcome banners, exchange keys, and setup crypto,
-   * compression, and MAC layers
+   * compression, and MAC layers.
    *
    * @see [libssh2_session_handshake](https://libssh2.org/libssh2_session_handshake.html)
    *
@@ -103,13 +122,13 @@ public:
    */
   void handshake(std::error_code& ec) {
     const auto rc = api::libssh2_session_handshake(handle(), socket_.native_handle());
-    ec = make_error_code(rc);
+    ec = std::error_code(rc, libssh2_error_category());
   }
 
   /** Perform the SSH handshake.
    *
    * This will trade welcome banners, exchange keys, and setup crypto,
-   * compression, and MAC layers
+   * compression, and MAC layers.
    *
    * @see [libssh2_session_handshake](https://libssh2.org/libssh2_session_handshake.html)
    *
@@ -121,12 +140,41 @@ public:
     detail::throw_on_error(ec);
   }
 
-  std::string_view hostkey_hash() const {
-    const auto hash = api::libssh2_hostkey_hash(handle(), LIBSSH2_HOSTKEY_HASH_SHA1);
+  /** Return a hash of the remote host's key.
+   *
+   * Returns the computed digest of the remote system's hostkey.
+   *
+   * @param hash_type The @ref hostkey_hash_type type of digest to calculate.
+   *
+   * @see [libssh2_hostkey_hash](https://libssh2.org/libssh2_hostkey_hash.html)
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   */
+  std::string_view hostkey_hash(hostkey_hash_type hash_type, std::error_code& ec) const {
+    const auto hash = api::libssh2_hostkey_hash(handle(), static_cast<int>(hash_type));
     if (hash == nullptr) {
-      throw std::runtime_error("Fingerprint unavailable");
+      ec = errors::hostkey_unavailable;
+      return {};
     }
-    return {hash, 20};
+    ec = {};
+    return {hash, detail::hostkey_hash_length(hash_type)};
+  }
+
+  /** Return a hash of the remote host's key.
+   *
+   * Returns the computed digest of the remote system's hostkey.
+   *
+   * @param hash_type The @ref hostkey_hash_type type of digest to calculate.
+   *
+   * @see [libssh2_hostkey_hash](https://libssh2.org/libssh2_hostkey_hash.html)
+   *
+   * @throws std::system_error Thrown on failure.
+   */
+  std::string_view hostkey_hash(hostkey_hash_type hash_type) const {
+    std::error_code ec;
+    auto fingerprint = hostkey_hash(hash_type, ec);
+    detail::throw_on_error(ec);
+    return fingerprint;
   }
 
   void public_key_auth(std::string_view username, const std::filesystem::path& pubkey, const std::filesystem::path& privkey) {
