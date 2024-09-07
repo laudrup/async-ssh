@@ -177,28 +177,82 @@ public:
     return fingerprint;
   }
 
-  void public_key_auth(std::string_view username, const std::filesystem::path& pubkey, const std::filesystem::path& privkey) {
+  /** Authenticate a session with a public key, read from a file
+   *
+   * @param username The user to authenticate.
+   *
+   * @param pubkey The path to the public key to use for authenticating the user
+   *
+   * @param privkey The path to the private key to use for authenticating the user
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   *
+   * @see [libssh2_userauth_publickey_fromfile_ex](https://libssh2.org/libssh2_userauth_publickey_fromfile_ex.html)
+   */
+  void public_key_auth(std::string_view username, const std::filesystem::path& pubkey,
+                       const std::filesystem::path& privkey, std::error_code& ec) {
     const auto rc = api::libssh2_userauth_publickey_fromfile_ex(handle(),
                                                                 username.data(),
                                                                 static_cast<unsigned int>(username.size()),
                                                                 pubkey.string().c_str(),
                                                                 privkey.string().c_str(),
                                                                 nullptr);
-    if (rc != 0) {
-      throw std::runtime_error("Failed public key auth: " + std::to_string(rc));
-    }
+    ec = std::error_code(rc, libssh2_error_category());
   }
 
-  void password_auth(std::string_view username, std::string_view password) {
+  /** Authenticate a session with a public key, read from a file
+   *
+   * @param username The user to authenticate.
+   *
+   * @param pubkey The path to the public key to use for authenticating the user
+   *
+   * @param privkey The path to the private key to use for authenticating the user
+   *
+   * @throws std::system_error Thrown on failure.
+   *
+   * @see [libssh2_userauth_publickey_fromfile_ex](https://libssh2.org/libssh2_userauth_publickey_fromfile_ex.html)
+   */
+  void public_key_auth(std::string_view username, const std::filesystem::path& pubkey,
+                       const std::filesystem::path& privkey) {
+    std::error_code ec;
+    public_key_auth(username, pubkey, privkey, ec);
+    detail::throw_on_error(ec, "public_key_auth");
+  }
+
+  /** Authenticate a session with a username and password
+   *
+   * @param username The user to authenticate.
+   *
+   * @param password Password to use for authenticating username.
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   *
+   * @see [libssh2_userauth_password_ex](https://libssh2.org/libssh2_userauth_password_ex.html)
+   */
+  void password_auth(std::string_view username, std::string_view password, std::error_code& ec) {
     const auto rc = api::libssh2_userauth_password_ex(handle(),
                                                       username.data(),
                                                       static_cast<unsigned int>(username.size()),
                                                       password.data(),
                                                       static_cast<unsigned int>(password.size()),
                                                       nullptr);
-    if (rc != 0) {
-      throw std::runtime_error("Failed password auth: " + std::to_string(rc));
-    }
+    ec = std::error_code(rc, libssh2_error_category());
+  }
+
+  /** Authenticate a session with a username and password
+   *
+   * @param username The user to authenticate.
+   *
+   * @param password Password to use for authenticating username.
+   *
+   * @throws std::system_error Thrown on failure.
+   *
+   * @see [libssh2_userauth_password_ex](https://libssh2.org/libssh2_userauth_password_ex.html)
+   */
+  void password_auth(std::string_view username, std::string_view password) {
+    std::error_code ec;
+    password_auth(username, password, ec);
+    detail::throw_on_error(ec, "password_auth");
   }
 
   bool authenticated() const {

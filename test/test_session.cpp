@@ -116,3 +116,98 @@ TEST_CASE_METHOD(session_fixture, "Session hostkey hash") {
                          error_code_matches(make_error_code(async_ssh::errors::hostkey_unavailable)));
   }
 }
+
+TEST_CASE_METHOD(session_fixture, "Session public key authentication") {
+  using async_ssh::test::error_code_matches;
+  using async_ssh::make_error_code;
+
+  std::string username{"freja"};
+  std::filesystem::path pubkey{"id_rsa.pub"};
+  std::filesystem::path privkey{"id_rsa"};
+
+  SECTION("No error") {
+    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                 libssh2_userauth_publickey_fromfile_ex(libssh2_session_ptr,
+                                                        username.data(),
+                                                        username.size(),
+                                                        trompeloeil::eq<const char*>(pubkey.string()),
+                                                        trompeloeil::eq<const char*>(privkey.string()),
+                                                        nullptr))
+      .RETURN(0)
+      .TIMES(2);
+
+    std::error_code ec;
+    session.public_key_auth(username, pubkey, privkey, ec);
+    CHECK_FALSE(ec);
+    CHECK_NOTHROW(session.public_key_auth(username, pubkey, privkey));
+  }
+
+  SECTION("Authentication errors") {
+    auto rc = LIBSSH2_ERROR_AUTHENTICATION_FAILED;
+    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                 libssh2_userauth_publickey_fromfile_ex(libssh2_session_ptr,
+                                                        username.data(),
+                                                        username.size(),
+                                                        trompeloeil::eq<const char*>(pubkey.string()),
+                                                        trompeloeil::eq<const char*>(privkey.string()),
+                                                        nullptr))
+      .RETURN(rc)
+      .TIMES(2);
+
+    std::error_code ec;
+    session.public_key_auth(username, pubkey, privkey, ec);
+    CHECK(ec == make_error_code(static_cast<async_ssh::libssh2_errors>(rc)));
+    CHECK_THROWS_MATCHES(session.public_key_auth(username, pubkey, privkey),
+                         std::system_error,
+                         error_code_matches(make_error_code(static_cast<async_ssh::libssh2_errors>(rc))));
+
+  }
+
+}
+
+TEST_CASE_METHOD(session_fixture, "Session password authentication") {
+  using async_ssh::test::error_code_matches;
+  using async_ssh::make_error_code;
+
+  std::string username{"freja"};
+  std::string password{"hunter2"};
+
+  SECTION("No error") {
+    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                 libssh2_userauth_password_ex(libssh2_session_ptr,
+                                              username.data(),
+                                              username.size(),
+                                              password.data(),
+                                              password.size(),
+                                              nullptr))
+      .RETURN(0)
+      .TIMES(2);
+
+    std::error_code ec;
+    session.password_auth(username, password, ec);
+    CHECK_FALSE(ec);
+    CHECK_NOTHROW(session.password_auth(username, password));
+  }
+
+  SECTION("Authentication errors") {
+    auto rc = LIBSSH2_ERROR_AUTHENTICATION_FAILED;
+    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                 libssh2_userauth_password_ex(libssh2_session_ptr,
+                                              username.data(),
+                                              username.size(),
+                                              password.data(),
+                                              password.size(),
+                                              nullptr))
+
+      .RETURN(rc)
+      .TIMES(2);
+
+    std::error_code ec;
+    session.password_auth(username, password, ec);
+    CHECK(ec == make_error_code(static_cast<async_ssh::libssh2_errors>(rc)));
+    CHECK_THROWS_MATCHES(session.password_auth(username, password),
+                         std::system_error,
+                         error_code_matches(make_error_code(static_cast<async_ssh::libssh2_errors>(rc))));
+
+  }
+}
