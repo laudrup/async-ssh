@@ -8,6 +8,7 @@
 
 #include <filesystem>
 #include <memory>
+#include <new>
 #include <stdexcept>
 #include <string_view>
 #include <system_error>
@@ -34,6 +35,10 @@ public:
    *
    *  @param arg The argument to be passed to initialise the
    *  underlying socket object. Typically a [boost::asio::io_context](https://www.boost.org/doc/libs/release/doc/html/boost_asio/reference/io_context.html)
+   *
+   * @see [libssh2_session_init](https://libssh2.org/libssh2_session_init.html)
+   *
+   * @throws std::bad_alloc On storage allocation failures.
    */
   template <class Arg>
   explicit session(Arg&& arg)
@@ -42,7 +47,7 @@ public:
                api::libssh2_session_free) {
     static_assert(std::is_convertible_v<decltype(socket_.native_handle()), libssh2_socket_t>, "Invalid SocketType");
     if (session_ == nullptr) {
-      throw std::runtime_error("Unable to allocate libssh2_session");
+      throw std::bad_alloc{};
     }
   }
   session(const session&) = delete;
