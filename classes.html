@@ -301,6 +301,132 @@
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9async_ssh7session8scp_recvERKNSt10filesystem4pathERNSt10error_codeE">
+<span id="_CPPv3N9async_ssh7session8scp_recvERKNSt10filesystem4pathERNSt10error_codeE"></span><span id="_CPPv2N9async_ssh7session8scp_recvERKNSt10filesystem4pathERNSt10error_codeE"></span><span id="async_ssh::session::scp_recv__std::filesystem::pathCR.std::error_codeR"></span><span class="target" id="classasync__ssh_1_1session_1aad2303b0e3cb58d83c502af274b0a17c"></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">async_ssh</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N9async_ssh7channelE" title="async_ssh::channel"><span class="n"><span class="pre">channel</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">async_ssh</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N9async_ssh22remote_directory_entryE" title="async_ssh::remote_directory_entry"><span class="n"><span class="pre">remote_directory_entry</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scp_recv</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">path</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">error_code</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ec</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9async_ssh7session8scp_recvERKNSt10filesystem4pathERNSt10error_codeE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Request a remote file via SCP. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://libssh2.org/libssh2_scp_recv2.html">libssh2_scp_recv2</a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – The path of the remote file</p></li>
+<li><p><strong>ec</strong> – Set to indicate what error occurred, if any.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A channel for getting the file data and an entry with status on the remote file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9async_ssh7session8scp_recvERKNSt10filesystem4pathE">
+<span id="_CPPv3N9async_ssh7session8scp_recvERKNSt10filesystem4pathE"></span><span id="_CPPv2N9async_ssh7session8scp_recvERKNSt10filesystem4pathE"></span><span id="async_ssh::session::scp_recv__std::filesystem::pathCR"></span><span class="target" id="classasync__ssh_1_1session_1a0f5d206492131c75823b8f99ed794dd1"></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">async_ssh</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N9async_ssh7channelE" title="async_ssh::channel"><span class="n"><span class="pre">channel</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">async_ssh</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N9async_ssh22remote_directory_entryE" title="async_ssh::remote_directory_entry"><span class="n"><span class="pre">remote_directory_entry</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scp_recv</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">filesystem</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">path</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9async_ssh7session8scp_recvERKNSt10filesystem4pathE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Request a remote file via SCP. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://libssh2.org/libssh2_scp_recv2.html">libssh2_scp_recv2</a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> – The path of the remote file</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">system_error</span></span></span> – Thrown on failure.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A channel for getting the file data and an entry with status on the remote file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="channel">
+<h2>channel<a class="headerlink" href="#channel" title="Link to this heading">¶</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N9async_ssh7channelE">
+<span id="_CPPv3N9async_ssh7channelE"></span><span id="_CPPv2N9async_ssh7channelE"></span><span id="async_ssh::channel"></span><span class="target" id="classasync__ssh_1_1channel"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">channel</span></span></span><a class="headerlink" href="#_CPPv4N9async_ssh7channelE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>The channel class represents an open SSH channel for receiving and sending data to the remote server. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN9async_ssh7channel9read_someE6size_tRK21MutableBufferSequenceRNSt10error_codeE">
+<span id="_CPPv3I0EN9async_ssh7channel9read_someERK21MutableBufferSequenceRNSt10error_codeE"></span><span id="_CPPv2I0EN9async_ssh7channel9read_someERK21MutableBufferSequenceRNSt10error_codeE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MutableBufferSequence</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classasync__ssh_1_1channel_1a4b13dee14616f6bb61d5ac156a7a79f2"></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_some</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN9async_ssh7channel9read_someE6size_tRK21MutableBufferSequenceRNSt10error_codeE" title="async_ssh::channel::read_some::MutableBufferSequence"><span class="n"><span class="pre">MutableBufferSequence</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">buffers</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">error_code</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ec</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN9async_ssh7channel9read_someE6size_tRK21MutableBufferSequenceRNSt10error_codeE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Read some data from the channel. </p>
+<p>This function is used to read data from the channel. The function call will block until one or more bytes of data has been read successfully, or until an error occurs.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://libssh2.org/libssh2_channel_read.html">libssh2_channel_read</a></p>
+</div>
+</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">read_some</span></code> operation may not read all of the requested number of bytes. Consider using the <code class="docutils literal notranslate"><span class="pre">net::read</span></code> function if you need to ensure that the requested amount of data is read before the blocking operation completes.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ec</strong> – Set to indicate what error occurred, if any. </p></li>
+<li><p><strong>buffers</strong> – The buffers into which the data will be read.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of bytes read.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN9async_ssh7channel9read_someE6size_tRK21MutableBufferSequence">
+<span id="_CPPv3I0EN9async_ssh7channel9read_someERK21MutableBufferSequence"></span><span id="_CPPv2I0EN9async_ssh7channel9read_someERK21MutableBufferSequence"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MutableBufferSequence</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classasync__ssh_1_1channel_1aa193c67e8e19bbd5867cd8c97b9349d5"></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_some</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN9async_ssh7channel9read_someE6size_tRK21MutableBufferSequence" title="async_ssh::channel::read_some::MutableBufferSequence"><span class="n"><span class="pre">MutableBufferSequence</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">buffers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN9async_ssh7channel9read_someE6size_tRK21MutableBufferSequence" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Read some data from the channel. </p>
+<p>This function is used to read data from the channel. The function call will block until one or more bytes of data has been read successfully, or until an error occurs.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://libssh2.org/libssh2_channel_read.html">libssh2_channel_read</a></p>
+</div>
+</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">read_some</span></code> operation may not read all of the requested number of bytes. Consider using the <code class="docutils literal notranslate"><span class="pre">net::read</span></code> function if you need to ensure that the requested amount of data is read before the blocking operation completes.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>buffers</strong> – The buffers into which the data will be read.</p>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">system_error</span></span></span> – Thrown on failure.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The number of bytes read.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9async_ssh7channel6handleEv">
+<span id="_CPPv3NK9async_ssh7channel6handleEv"></span><span id="_CPPv2NK9async_ssh7channel6handleEv"></span><span id="async_ssh::channel::handleC"></span><span class="target" id="classasync__ssh_1_1channel_1a857fbc00269c63c1279d79f339e15fbb"></span><span class="w"> </span><span class="n"><span class="pre">LIBSSH2_CHANNEL</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">handle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9async_ssh7channel6handleEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Get a pointer to the libssh2 channel being used by this object. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://libssh2.org/docs.html">libssh2 docs</a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A pointer to the libssh2 channel. Ownership is not transferred to the caller. </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </dd></dl>
 
