@@ -13,7 +13,7 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/catchorg/Catch2.git
   GIT_TAG        v3.7.0
   GIT_PROGRESS   TRUE
-  PATCH_COMMAND ${Patch_EXECUTABLE} --binary -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/catch2.patch
+  PATCH_COMMAND ${Patch_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/catch2.patch
 )
 
 FetchContent_MakeAvailable(Catch2)
