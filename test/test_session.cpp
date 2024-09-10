@@ -30,7 +30,7 @@ TEST_CASE("Session init") {
                  libssh2_session_free(ptr))
       .RETURN(0);
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
-                 libssh2_session_disconnect_ex(ptr, 11, "Goodbye", ""))
+                 libssh2_session_disconnect_ex(ptr, SSH_DISCONNECT_BY_APPLICATION, trompeloeil::_, trompeloeil::_))
       .RETURN(0);
 
     CHECK_NOTHROW(async_ssh::session<async_ssh::test::socket_mock>(ctx));

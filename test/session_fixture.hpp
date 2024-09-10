@@ -37,7 +37,8 @@ public:
                                                           libssh2_session_free(libssh2_session_ptr))
                                        .RETURN(0),
                                        NAMED_REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
-                                                          libssh2_session_disconnect_ex(libssh2_session_ptr, 11, "Goodbye", ""))
+                                                          libssh2_session_disconnect_ex(libssh2_session_ptr, SSH_DISCONNECT_BY_APPLICATION,
+                                                                                        trompeloeil::_, trompeloeil::_))
                                        .RETURN(0))
       }
     , session(io_context) {
