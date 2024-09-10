@@ -77,9 +77,9 @@ int main(int argc, char* argv[]) {
       session.password_auth(username, password);
     }
 
-    auto [channel, fileinfo] = session.scp_recv(scppath);
+    auto [channel, entry] = session.scp_recv(scppath);
     size_t total_read = 0;
-    while (total_read < static_cast<size_t>(fileinfo.st_size)) {
+    while (total_read < entry.size()) {
       std::array<char, 1024> mem{};
       auto read = channel.read_some(boost::asio::buffer(mem));
       std::cout << std::string(mem.data(), mem.size());

@@ -8,9 +8,11 @@ set(DOXYFILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
 set(DOXYFILE_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 
 set(ASYNC_SSH_PUBLIC_HEADERS
-  ${DOXYGEN_INPUT_DIR}/session.hpp
-  ${DOXYGEN_INPUT_DIR}/hostkey_hash_type.hpp
+  ${DOXYGEN_INPUT_DIR}/channel.hpp
   ${DOXYGEN_INPUT_DIR}/error.hpp
+  ${DOXYGEN_INPUT_DIR}/hostkey_hash_type.hpp
+  ${DOXYGEN_INPUT_DIR}/remote_directory_entry.hpp
+  ${DOXYGEN_INPUT_DIR}/session.hpp
 )
 
 string(REPLACE ";" " " DOXYGEN_INPUT_FILES "${ASYNC_SSH_PUBLIC_HEADERS}")
@@ -31,10 +33,10 @@ set(SPHINX_SOURCE ${CMAKE_CURRENT_SOURCE_DIR})
 set(SPHINX_BUILD ${CMAKE_CURRENT_BINARY_DIR}/html)
 set(SPHINX_INDEX_FILE ${SPHINX_BUILD}/index.html)
 set(SPHINX_SOURCE_FILES
-  ${CMAKE_CURRENT_SOURCE_DIR}/index.rst
   ${CMAKE_CURRENT_SOURCE_DIR}/API.rst
   ${CMAKE_CURRENT_SOURCE_DIR}/classes.rst
   ${CMAKE_CURRENT_SOURCE_DIR}/enumerations.rst
+  ${CMAKE_CURRENT_SOURCE_DIR}/index.rst
 )
 
 add_custom_command(OUTPUT ${SPHINX_INDEX_FILE}

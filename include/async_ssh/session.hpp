@@ -3,6 +3,7 @@
 
 #include <async_ssh/channel.hpp>
 #include <async_ssh/error.hpp>
+#include <async_ssh/remote_directory_entry.hpp>
 #include <async_ssh/hostkey_hash_type.hpp>
 
 #include <async_ssh/detail/libssh2_init.hpp>
@@ -12,7 +13,6 @@
 #include <filesystem>
 #include <memory>
 #include <new>
-#include <stdexcept>
 #include <string_view>
 #include <system_error>
 #include <type_traits>
@@ -255,13 +255,44 @@ public:
     detail::throw_on_error(ec, "password_auth");
   }
 
-  bool authenticated() const {
-    return api::libssh2_userauth_authenticated(handle()) == 1;
+  /** Request a remote file via SCP
+   *
+   * @param path The path of the remote file
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   *
+   * @return A channel for getting the file data and an entry with
+   * status on the remote file.
+   *
+   * @see [libssh2_scp_recv2](https://libssh2.org/libssh2_scp_recv2.html)
+   */
+  std::tuple<async_ssh::channel, async_ssh::remote_directory_entry> scp_recv(const std::filesystem::path& path, std::error_code& ec) {
+    remote_directory_entry entry{};
+    LIBSSH2_CHANNEL* chan = api::libssh2_scp_recv2(handle(), path.string().c_str(), &entry.stat_);
+    if (chan == nullptr) {
+      ec = std::error_code(api::libssh2_session_last_errno(handle()), libssh2_error_category());
+    } else {
+      ec = {};
+    }
+    return {channel{chan}, entry};
   }
 
-  std::tuple<async_ssh::channel, libssh2_struct_stat> scp_recv(const std::filesystem::path& path) {
-    libssh2_struct_stat fileinfo;
-    return {channel{libssh2_scp_recv2(handle(), path.string().c_str(), &fileinfo), handle()}, fileinfo};
+  /** Request a remote file via SCP
+   *
+   * @param path The path of the remote file
+   *
+   * @return A channel for getting the file data and an entry with
+   * status on the remote file.
+   *
+   * @throws std::system_error Thrown on failure.
+   *
+   * @see [libssh2_scp_recv2](https://libssh2.org/libssh2_scp_recv2.html)
+   */
+  std::tuple<async_ssh::channel, async_ssh::remote_directory_entry> scp_recv(const std::filesystem::path& path) {
+    std::error_code ec;
+    std::tuple<async_ssh::channel, async_ssh::remote_directory_entry> ret = scp_recv(path, ec);
+    detail::throw_on_error(ec, "scp_recv");
+    return ret;
   }
 
 private:
