@@ -20,7 +20,7 @@ using async_ssh::test::session_fixture;
 TEST_CASE("Session init") {
   boost::asio::io_context ctx;
   SECTION("No errors") {
-    LIBSSH2_SESSION* ptr = reinterpret_cast<LIBSSH2_SESSION*>(0xdecafbad);
+    LIBSSH2_SESSION* ptr = reinterpret_cast<LIBSSH2_SESSION*>(0xdecafbadULL);
 
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_session_init_ex(nullptr, nullptr, nullptr, nullptr))
@@ -129,7 +129,7 @@ TEST_CASE_METHOD(session_fixture, "Session public key authentication") {
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_userauth_publickey_fromfile_ex(libssh2_session_ptr,
                                                         username.data(),
-                                                        username.size(),
+                                                        static_cast<unsigned int>(username.size()),
                                                         trompeloeil::eq<const char*>(pubkey.string()),
                                                         trompeloeil::eq<const char*>(privkey.string()),
                                                         nullptr))
@@ -147,7 +147,7 @@ TEST_CASE_METHOD(session_fixture, "Session public key authentication") {
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_userauth_publickey_fromfile_ex(libssh2_session_ptr,
                                                         username.data(),
-                                                        username.size(),
+                                                        static_cast<unsigned int>(username.size()),
                                                         trompeloeil::eq<const char*>(pubkey.string()),
                                                         trompeloeil::eq<const char*>(privkey.string()),
                                                         nullptr))
@@ -176,9 +176,9 @@ TEST_CASE_METHOD(session_fixture, "Session password authentication") {
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_userauth_password_ex(libssh2_session_ptr,
                                               username.data(),
-                                              username.size(),
+                                              static_cast<unsigned int>(username.size()),
                                               password.data(),
-                                              password.size(),
+                                              static_cast<unsigned int>(password.size()),
                                               nullptr))
       .RETURN(0)
       .TIMES(2);
@@ -194,9 +194,9 @@ TEST_CASE_METHOD(session_fixture, "Session password authentication") {
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_userauth_password_ex(libssh2_session_ptr,
                                               username.data(),
-                                              username.size(),
+                                              static_cast<unsigned int>(username.size()),
                                               password.data(),
-                                              password.size(),
+                                              static_cast<unsigned int>(password.size()),
                                               nullptr))
 
       .RETURN(rc)
