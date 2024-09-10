@@ -7,6 +7,7 @@ Include(FetchContent)
 find_package(Patch)
 set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
 set(FETCHCONTENT_QUIET FALSE)
+set(CATCH_CONFIG_ENABLE_ALL_STRINGMAKERS ON)
 
 FetchContent_Declare(
   Catch2
