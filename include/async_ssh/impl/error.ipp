@@ -1,6 +1,7 @@
 #ifndef ASYNC_SSH_IMPL_ERROR_IPP
 #define ASYNC_SSH_IMPL_ERROR_IPP
 
+#include <string>
 #include <system_error>
 
 namespace async_ssh {
