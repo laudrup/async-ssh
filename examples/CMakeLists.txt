@@ -11,3 +11,9 @@ if(WIN32)
 else()
   target_sources(scp PRIVATE os_util_posix.cpp)
 endif()
+
+if(ENABLE_ADDRESS_SANITIZER)
+  target_link_libraries(scp PRIVATE
+    address_sanitizer
+  )
+endif()

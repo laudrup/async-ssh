@@ -62,4 +62,10 @@ if(ENABLE_COVERAGE)
   )
 endif()
 
+if(ENABLE_ADDRESS_SANITIZER)
+  target_link_libraries(unittest PRIVATE
+    address_sanitizer
+  )
+endif()
+
 add_test(NAME unittest COMMAND unittest)

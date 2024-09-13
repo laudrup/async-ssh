@@ -19,6 +19,7 @@ find_package(Boost CONFIG REQUIRED)
 
 include(cmake/project-is-top-level.cmake)
 include(cmake/variables.cmake)
+include(cmake/address-sanitizer.cmake)
 include(cmake/compiler-warnings.cmake)
 include(cmake/coverage.cmake)
 
@@ -52,6 +53,7 @@ option(BUILD_EXAMPLES "Enable building examples" ${PROJECT_IS_TOP_LEVEL})
 option(BUILD_DOCUMENTATION "Enable building documentation" OFF)
 option(WARNINGS_AS_ERRORS "Build with warnings as errors" ${PROJECT_IS_TOP_LEVEL})
 option(ENABLE_COVERAGE "Generate coverage info" OFF)
+option(ENABLE_ADDRESS_SANITIZER "Enable address sanitizer" OFF)
 
 if(BUILD_TESTING)
   include(CTest)
