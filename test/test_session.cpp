@@ -8,6 +8,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/generators/catch_generators.hpp>
 
+#include <libssh2.h>
 #include <trompeloeil.hpp>
 
 #include <boost/asio/io_context.hpp>
@@ -19,9 +20,9 @@ using async_ssh::test::session_fixture;
 
 TEST_CASE("Session init") {
   boost::asio::io_context ctx;
-  SECTION("No errors") {
-    LIBSSH2_SESSION* ptr = reinterpret_cast<LIBSSH2_SESSION*>(0xdecafbadULL);
+  LIBSSH2_SESSION* ptr = reinterpret_cast<LIBSSH2_SESSION*>(0xdecafbadULL);
 
+  SECTION("No errors") {
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_session_init_ex(nullptr, nullptr, nullptr, nullptr))
       .RETURN(ptr);
@@ -38,6 +39,23 @@ TEST_CASE("Session init") {
                  libssh2_session_init_ex(nullptr, nullptr, nullptr, nullptr))
       .RETURN(nullptr);
   CHECK_THROWS_AS(async_ssh::session<async_ssh::test::socket_mock>(ctx), std::bad_alloc);
+  }
+
+  SECTION("Move") {
+    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                 libssh2_session_init_ex(nullptr, nullptr, nullptr, nullptr))
+      .RETURN(ptr)
+      .TIMES(2);
+    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                 libssh2_session_free(ptr))
+      .RETURN(0)
+      .TIMES(2);
+
+    async_ssh::session<async_ssh::test::socket_mock> session(ctx);
+    auto moved_object(std::move(session));
+
+    async_ssh::session<async_ssh::test::socket_mock> another_session(ctx);
+    another_session = std::move(moved_object);
   }
 }
 
