@@ -29,9 +29,6 @@ TEST_CASE("Session init") {
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_session_free(ptr))
       .RETURN(0);
-    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
-                 libssh2_session_disconnect_ex(ptr, SSH_DISCONNECT_BY_APPLICATION, trompeloeil::_, trompeloeil::_))
-      .RETURN(0);
 
     CHECK_NOTHROW(async_ssh::session<async_ssh::test::socket_mock>(ctx));
   }
@@ -210,4 +207,43 @@ TEST_CASE_METHOD(session_fixture, "Session password authentication") {
                          error_code_matches(make_error_code(static_cast<async_ssh::libssh2_errors>(rc))));
 
   }
+}
+
+TEST_CASE_METHOD(session_fixture, "Session disconnect") {
+  using async_ssh::test::error_code_matches;
+  using async_ssh::make_error_code;
+  std::string reason{"Time to say goodbye"};
+
+  SECTION("No error") {
+    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                 libssh2_session_disconnect_ex(libssh2_session_ptr, SSH_DISCONNECT_BY_APPLICATION,
+                                               trompeloeil::_, trompeloeil::_))
+      .WITH(std::string(_3) == reason)
+      .RETURN(0)
+      .TIMES(2);
+
+    std::error_code ec;
+    session.disconnect(reason, ec);
+    CHECK_FALSE(ec);
+    CHECK_NOTHROW(session.disconnect(reason));
+  }
+
+  SECTION("Disconnect errors") {
+    auto rc = LIBSSH2_ERROR_SOCKET_DISCONNECT;
+    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                 libssh2_session_disconnect_ex(libssh2_session_ptr, SSH_DISCONNECT_BY_APPLICATION,
+                                               trompeloeil::_, trompeloeil::_))
+      .WITH(std::string(_3) == reason)
+      .RETURN(rc)
+      .TIMES(2);
+
+    std::error_code ec;
+    session.disconnect(reason, ec);
+    CHECK(ec == make_error_code(static_cast<async_ssh::libssh2_errors>(rc)));
+    CHECK_THROWS_MATCHES(session.disconnect(reason),
+                         std::system_error,
+                         error_code_matches(make_error_code(static_cast<async_ssh::libssh2_errors>(rc))));
+
+  }
+
 }

@@ -1,3 +1,5 @@
+#include "os_util.hpp"
+
 #include <async_ssh.hpp>
 
 #include <boost/asio.hpp>
@@ -8,8 +10,6 @@
 #include <iostream>
 #include <string>
 #include <string_view>
-
-#include "os_util.hpp"
 
 namespace {
   void write_hex_string(std::ostream& oss, std::string_view str) {
@@ -86,6 +86,8 @@ int main(int argc, char* argv[]) {
       total_read += read;
     }
 
+    // Gracefully shutdown the SSH connection
+    session.disconnect("Goodbye");
     return EXIT_SUCCESS;
   } catch (const std::exception& ex) {
     std::cerr << "Failed: " << ex.what() << "\n";

@@ -74,12 +74,6 @@ public:
   session(session&&) noexcept = default;
   session& operator=(session&&) noexcept = default;
 
-  ~session() {
-    if (session_) {
-      api::libssh2_session_disconnect(session_.get(), "Goodbye");
-    }
-  }
-
   /** Get a reference to the socket being used for communication with
    * the server.
    *
@@ -293,6 +287,39 @@ public:
     std::tuple<async_ssh::channel, async_ssh::remote_directory_entry> ret = scp_recv(path, ec);
     detail::throw_on_error(ec, "scp_recv");
     return ret;
+  }
+
+  /** Terminate transport layer
+   *
+   * Requests graceful shutdown of the SSH session.
+   *
+   * @param reason Human readable reason for disconnection.
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   *
+   * @see [libssh2_session_disconnect_ex](https://libssh2.org/libssh2_session_disconnect_ex.html)
+   *
+   */
+  void disconnect(const std::string& reason, std::error_code& ec) {
+    const auto rc = api::libssh2_session_disconnect(session_.get(), reason.c_str());
+    ec = std::error_code(rc, libssh2_error_category());
+  }
+
+  /** Terminate transport layer
+   *
+   * Requests graceful shutdown of the SSH session.
+   *
+   * @param reason Human readable reason for disconnection.
+   *
+   * @throws std::system_error Thrown on failure.
+   *
+   * @see [libssh2_session_disconnect_ex](https://libssh2.org/libssh2_session_disconnect_ex.html)
+   *
+   */
+  void disconnect(const std::string& reason) {
+    std::error_code ec{};
+    disconnect(reason.c_str(), ec);
+    detail::throw_on_error(ec, "disconnect");
   }
 
 private:
