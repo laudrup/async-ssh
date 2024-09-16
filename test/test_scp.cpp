@@ -1,7 +1,6 @@
 #include "session_fixture.hpp"
 #include "libssh2_api_mock.hpp"
 #include "catch2_matchers.hpp"
-#include "catch2_string_makers.hpp"
 
 #include <async_ssh.hpp>
 
@@ -23,6 +22,9 @@ TEST_CASE_METHOD(session_fixture, "scp") {
 
   SECTION("scp error") {
     auto rc = LIBSSH2_ERROR_SCP_PROTOCOL;
+    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                 libssh2_session_set_blocking(libssh2_session_ptr, 1))
+      .TIMES(2);
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_scp_recv2(libssh2_session_ptr,
                                    trompeloeil::eq<const char*>(path.string()),
@@ -56,6 +58,8 @@ TEST_CASE_METHOD(session_fixture, "scp") {
     }));
 
     auto st_mode = static_cast<unsigned short>(mode);
+    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                 libssh2_session_set_blocking(libssh2_session_ptr, 1));
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_scp_recv2(libssh2_session_ptr,
                                    trompeloeil::eq<const char*>(path.string()),

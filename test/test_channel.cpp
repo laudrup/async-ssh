@@ -18,6 +18,8 @@ TEST_CASE_METHOD(session_fixture, "channel") {
   std::filesystem::path path{"/somewhere/something"};
   LIBSSH2_CHANNEL* ptr = reinterpret_cast<LIBSSH2_CHANNEL*>(0xdecafbadULL);
   REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+               libssh2_session_set_blocking(libssh2_session_ptr, 1));
+  REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                libssh2_scp_recv2(libssh2_session_ptr,
                                  trompeloeil::eq<const char*>(path.string()),
                                  trompeloeil::_))
@@ -44,7 +46,6 @@ TEST_CASE_METHOD(session_fixture, "channel") {
                  libssh2_channel_read_ex(ptr, 0, trompeloeil::_, 1024UL))
       .LR_SIDE_EFFECT(std::copy_n(str.data(), str.size(), _3))
       .RETURN(str.size());
-
 
     std::error_code ec;
     auto [channel, entry] = session.scp_recv(path, ec);
