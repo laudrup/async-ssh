@@ -136,9 +136,7 @@ public:
    * @see [libssh2_session_handshake](https://libssh2.org/libssh2_session_handshake.html)
    */
   void handshake(std::error_code& ec) {
-    api::libssh2_session_set_blocking(handle(), 1);
-    const auto rc = api::libssh2_session_handshake(handle(), socket_.native_handle());
-    ec = std::error_code(rc, libssh2_error_category());
+    ec = do_blocking_call(api::libssh2_session_handshake, socket_.native_handle());
   }
 
   /** Perform the SSH handshake.
@@ -240,14 +238,12 @@ public:
    */
   void public_key_auth(std::string_view username, const std::filesystem::path& pubkey,
                        const std::filesystem::path& privkey, std::error_code& ec) {
-    api::libssh2_session_set_blocking(handle(), 1);
-    const auto rc = api::libssh2_userauth_publickey_fromfile_ex(handle(),
-                                                                username.data(),
-                                                                static_cast<unsigned int>(username.size()),
-                                                                pubkey.string().c_str(),
-                                                                privkey.string().c_str(),
-                                                                nullptr);
-    ec = std::error_code(rc, libssh2_error_category());
+    ec = do_blocking_call(api::libssh2_userauth_publickey_fromfile_ex,
+                          username.data(),
+                          static_cast<unsigned int>(username.size()),
+                          pubkey.string().c_str(),
+                          privkey.string().c_str(),
+                          nullptr);
   }
 
   /** Authenticate a session with a public key, read from a file
@@ -322,14 +318,12 @@ public:
    * @see [libssh2_userauth_password_ex](https://libssh2.org/libssh2_userauth_password_ex.html)
    */
   void password_auth(std::string_view username, std::string_view password, std::error_code& ec) {
-    api::libssh2_session_set_blocking(handle(), 1);
-    const auto rc = api::libssh2_userauth_password_ex(handle(),
-                                                      username.data(),
-                                                      static_cast<unsigned int>(username.size()),
-                                                      password.data(),
-                                                      static_cast<unsigned int>(password.size()),
-                                                      nullptr);
-    ec = std::error_code(rc, libssh2_error_category());
+    ec = do_blocking_call(api::libssh2_userauth_password_ex,
+                          username.data(),
+                          static_cast<unsigned int>(username.size()),
+                          password.data(),
+                          static_cast<unsigned int>(password.size()),
+                          nullptr);
   }
 
   /** Authenticate a session with a username and password
@@ -408,9 +402,7 @@ public:
    *
    */
   void disconnect(const std::string& reason, std::error_code& ec) {
-    api::libssh2_session_set_blocking(handle(), 1);
-    const auto rc = api::libssh2_session_disconnect(session_.get(), reason.c_str());
-    ec = std::error_code(rc, libssh2_error_category());
+    ec = do_blocking_call(api::libssh2_session_disconnect_ex, SSH_DISCONNECT_BY_APPLICATION, reason.c_str(), "");
   }
 
   /** Terminate transport layer
@@ -431,6 +423,12 @@ public:
   }
 
 private:
+  template<typename Func, typename... Args>
+  std::error_code do_blocking_call(Func&& func, Args&&... args) {
+    api::libssh2_session_set_blocking(handle(), 1);
+    return {func(handle(), std::forward<Args>(args)...), libssh2_error_category()};
+  }
+
   socket_type socket_;
   std::unique_ptr<LIBSSH2_SESSION, decltype(&detail::libssh2_api::libssh2_session_free)> session_;
 };
