@@ -169,7 +169,7 @@ public:
    * signature:
    * @code
    * void handler(
-   *     wintls::error_code // Result of operation.
+   *     std::error_code // Result of operation.
    * );
    * @endcode
    *
@@ -293,7 +293,7 @@ public:
    * signature:
    * @code
    * void handler(
-   *     wintls::error_code // Result of operation.
+   *     std::error_code // Result of operation.
    * );
    * @endcode
    *
