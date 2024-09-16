@@ -219,7 +219,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>handler</strong> – The handler to be called when the operation completes. The implementation takes ownership of the handler by performing a decay-copy. The handler must be invocable with this signature: <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">handler</span><span class="p">(</span>
-<span class="w">    </span><span class="n">wintls</span><span class="o">::</span><span class="n">error_code</span><span class="w"> </span><span class="c1">// Result of operation.</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">error_code</span><span class="w"> </span><span class="c1">// Result of operation.</span>
 <span class="p">);</span>
 </pre></div>
 </div>
@@ -335,7 +335,7 @@
 <li><p><strong>pubkey</strong> – The path to the public key to use for authenticating the user. The implementation will keep a copy of this argument.</p></li>
 <li><p><strong>privkey</strong> – The path to the private key to use for authenticating the user. The implementation will keep a copy of this argument.</p></li>
 <li><p><strong>handler</strong> – The handler to be called when the operation completes. The implementation takes ownership of the handler by performing a decay-copy. The handler must be invocable with this signature: <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">handler</span><span class="p">(</span>
-<span class="w">    </span><span class="n">wintls</span><span class="o">::</span><span class="n">error_code</span><span class="w"> </span><span class="c1">// Result of operation.</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">error_code</span><span class="w"> </span><span class="c1">// Result of operation.</span>
 <span class="p">);</span>
 </pre></div>
 </div>
