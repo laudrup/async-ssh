@@ -6,7 +6,6 @@ Include(FetchContent)
 
 set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
 set(FETCHCONTENT_QUIET FALSE)
-set(CATCH_CONFIG_ENABLE_ALL_STRINGMAKERS ON)
 
 FetchContent_Declare(
   Catch2
@@ -51,6 +50,7 @@ target_link_libraries(unittest PRIVATE
 )
 target_compile_definitions(unittest PRIVATE
   ASYNC_SSH_MOCK_LIBSSH2_API
+  CATCH_CONFIG_ENABLE_ALL_STRINGMAKERS
 )
 target_compile_features(unittest PRIVATE
   cxx_std_17
