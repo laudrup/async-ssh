@@ -4,7 +4,6 @@ project(async-ssh-tests LANGUAGES CXX)
 
 Include(FetchContent)
 
-find_package(Patch)
 set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
 set(FETCHCONTENT_QUIET FALSE)
 set(CATCH_CONFIG_ENABLE_ALL_STRINGMAKERS ON)
@@ -12,9 +11,8 @@ set(CATCH_CONFIG_ENABLE_ALL_STRINGMAKERS ON)
 FetchContent_Declare(
   Catch2
   GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-  GIT_TAG        v3.7.0
+  GIT_TAG        v3.7.1
   GIT_PROGRESS   TRUE
-  PATCH_COMMAND ${Patch_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/catch2.patch
 )
 
 FetchContent_MakeAvailable(Catch2)
