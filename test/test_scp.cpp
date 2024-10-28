@@ -10,10 +10,29 @@
 #include <libssh2.h>
 #include <trompeloeil.hpp>
 
+#include <chrono>
 #include <filesystem>
 #include <system_error>
 
 using async_ssh::test::session_fixture;
+
+std::string format_perms(std::filesystem::perms p) {
+    using std::filesystem::perms;
+    std::string str;
+    auto append = [&str, p](char op, perms perm) {
+        str += (perms::none == (perm & p) ? '-' : op);
+    };
+    append('r', perms::owner_read);
+    append('w', perms::owner_write);
+    append('x', perms::owner_exec);
+    append('r', perms::group_read);
+    append('w', perms::group_write);
+    append('x', perms::group_exec);
+    append('r', perms::others_read);
+    append('w', perms::others_write);
+    append('x', perms::others_exec);
+    return str;
+}
 
 TEST_CASE_METHOD(session_fixture, "scp") {
   std::filesystem::path path{"/somewhere/something"};
@@ -43,38 +62,41 @@ TEST_CASE_METHOD(session_fixture, "scp") {
                          std::system_error,
                          error_code_matches(make_error_code(static_cast<async_ssh::libssh2_errors>(rc))));
   }
-  SECTION("File types") {
+  SECTION("File metadata") {
     using std::filesystem::perms;
     LIBSSH2_CHANNEL* ptr = reinterpret_cast<LIBSSH2_CHANNEL*>(0xdecafbadULL);
+    const std::time_t mtime = 1498001148;
+    const std::time_t atime = 1728822518;
+    const std::size_t size = 18374625329;
 
-    auto [file_type, mode] = GENERATE(table<std::filesystem::file_type, int>({
-          { std::filesystem::file_type::regular, 0100666 },
-          { std::filesystem::file_type::directory, 040666 },
-          { std::filesystem::file_type::symlink, 0120666 },
-          { std::filesystem::file_type::block, 060666 },
-          { std::filesystem::file_type::character, 020666 },
-          { std::filesystem::file_type::fifo, 010666 },
-          { std::filesystem::file_type::socket, 0140666 }
+    auto [str, mode] = GENERATE(table<std::string, unsigned short>({
+          { "rw-rw-rw-", 0666 },
+          { "---------", 0000 },
+          { "---r-----", 0040 },
+          { "r-----r--", 0404 },
+          { "rw-r--r--", 0644 },
+          { "rwxr-xr-x", 0755 }
     }));
 
-    auto st_mode = static_cast<unsigned short>(mode);
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_session_set_blocking(libssh2_session_ptr, 1));
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_scp_recv2(libssh2_session_ptr,
                                    trompeloeil::eq<const char*>(path.string()),
                                    trompeloeil::_))
-      .LR_SIDE_EFFECT(_3->st_mode = st_mode)
+      .LR_SIDE_EFFECT(_3->st_mode = mode)
+      .LR_SIDE_EFFECT(_3->st_mtime = mtime)
+      .LR_SIDE_EFFECT(_3->st_atime = atime)
+      .LR_SIDE_EFFECT(_3->st_size = size)
       .RETURN(ptr);
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_channel_free(ptr))
       .RETURN(0);
 
     const auto [channel, entry] = session.scp_recv(path);
-    CHECK(entry.status().type() == file_type);
-    CHECK(entry.status().permissions() ==
-          (perms::owner_read | perms::owner_write |
-           perms::group_read | perms::group_write |
-           perms::others_read | perms::others_write));
+    CHECK(format_perms(entry.permissions()) == str);
+    CHECK(std::chrono::system_clock::to_time_t(entry.last_write_time()) == mtime);
+    CHECK(std::chrono::system_clock::to_time_t(entry.last_access_time()) == atime);
+    CHECK(entry.size() == size);
   }
 }
