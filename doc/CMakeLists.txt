@@ -48,7 +48,7 @@ add_custom_command(OUTPUT ${SPHINX_INDEX_FILE}
 		${SPHINX_SOURCE} ${SPHINX_BUILD}
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	DEPENDS
-    ${CMAKE_CURRENT_SOURCE_DIR}/static/async-ssh.css
+    ${CMAKE_CURRENT_SOURCE_DIR}/static/async_ssh.css
     ${CMAKE_CURRENT_SOURCE_DIR}/templates/layout.html
     ${CMAKE_CURRENT_SOURCE_DIR}/templates/navbar.html
     ${CMAKE_CURRENT_SOURCE_DIR}/extensions/toctree_elements.py
