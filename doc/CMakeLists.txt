@@ -1,7 +1,7 @@
 find_package(Doxygen REQUIRED)
 find_package(Sphinx REQUIRED)
 
-set(DOXYGEN_INPUT_DIR ${PROJECT_SOURCE_DIR}/include/async_ssh/)
+set(DOXYGEN_INPUT_DIR ${PROJECT_SOURCE_DIR}/include/async_ssh)
 set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/doxygen)
 set(DOXYGEN_INDEX_FILE ${DOXYGEN_OUTPUT_DIR}/index.xml)
 set(DOXYFILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
