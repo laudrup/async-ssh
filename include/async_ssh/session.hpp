@@ -363,7 +363,7 @@ public:
   std::tuple<async_ssh::channel, async_ssh::remote_directory_entry> scp_recv(const std::filesystem::path& path, std::error_code& ec) {
     api::libssh2_session_set_blocking(handle(), 1);
     remote_directory_entry entry{};
-    LIBSSH2_CHANNEL* chan = api::libssh2_scp_recv2(handle(), path.string().c_str(), &entry.stat_);
+    LIBSSH2_CHANNEL* chan = api::libssh2_scp_recv2(handle(), path.c_str(), &entry.stat_);
     if (chan == nullptr) {
       ec = std::error_code(api::libssh2_session_last_errno(handle()), libssh2_error_category());
     } else {
