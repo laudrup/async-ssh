@@ -12,21 +12,22 @@
 #include <string_view>
 
 namespace {
-  void write_hex_string(std::ostream& oss, std::string_view str) {
-    auto flags = oss.flags();
-    for (const auto c : str) {
-      oss << std::hex << (0xFF & c) << " ";
-    }
-    oss.flags(flags);
-    oss << "\n";
+void write_hex_string(std::ostream& oss, std::string_view str) {
+  auto flags = oss.flags();
+  for (const auto c : str) {
+    oss << std::hex << (0xFF & c) << " ";
   }
+  oss.flags(flags);
+  oss << "\n";
+}
 
-  std::string read_password() {
-    async_ssh::utils::stdin_echo_disabler disable_echo;
-    std::string password;
-    std::cin >> password;
-    return password;
-  }
+std::string read_password() {
+  async_ssh::utils::stdin_echo_disabler disable_echo;
+  std::string password;
+  std::cin >> password;
+  return password;
+}
+
 } // namespace
 
 int main(int argc, char* argv[]) {
