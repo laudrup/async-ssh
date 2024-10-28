@@ -1,6 +1,9 @@
+excessive_specifiers = ['enumerator', 'inline']
+
+
 def doctree_resolved(app, doctree, docname):
     for node in doctree.traverse():
-        if (node.astext() == 'inline' and node.parent.tagname == 'desc_signature_line'):
+        if node.astext() in excessive_specifiers and node.parent.tagname == 'desc_signature_line':
             node.parent.remove(node)
 
 
