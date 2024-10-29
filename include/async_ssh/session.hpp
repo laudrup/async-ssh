@@ -342,6 +342,33 @@ public:
     detail::throw_on_error(ec, "password_auth");
   }
 
+  /** Authenticate a session with a username and password
+   *
+   * This function call always returns immediately.
+   *
+   * @param username The user to authenticate. The implementation will
+   * keep a copy of this argument.
+   *
+   * @param password Password to use for authenticating user. The
+   * implementation will keep a copy of this argument.
+   *
+   * @param handler The handler to be called when the operation
+   * completes. The implementation takes ownership of the handler by
+   * performing a decay-copy. The handler must be invocable with this
+   * signature:
+   * @code
+   * void handler(
+   *     const std::error_code& // Result of operation.
+   * );
+   * @endcode
+   *
+   * @note Regardless of whether the asynchronous operation completes
+   * immediately or not, the handler will not be invoked from within
+   * this function. Invocation of the handler will be performed in a
+   * manner equivalent to using `net::post`.
+   *
+   * @see [libssh2_userauth_password_ex](https://libssh2.org/libssh2_userauth_password_ex.html)
+   */
   template <class CompletionToken>
   auto async_password_auth(std::string_view username, std::string_view password,
                            CompletionToken&& handler) {
