@@ -8,6 +8,7 @@
 
 #include <async_ssh/detail/libssh2_init.hpp>
 #include <async_ssh/detail/libssh2_api.hpp>
+#include <async_ssh/detail/async_disconnect.hpp>
 #include <async_ssh/detail/async_handshake.hpp>
 #include <async_ssh/detail/async_public_key_auth.hpp>
 #include <async_ssh/detail/async_password_auth.hpp>
@@ -447,6 +448,35 @@ public:
     std::error_code ec{};
     disconnect(reason.c_str(), ec);
     detail::throw_on_error(ec, "disconnect");
+  }
+
+  /** Disconnect SSH session.
+   *
+   * Requests graceful shutdown of the SSH session.
+   *
+   * @param reason Human readable reason for disconnection.
+   *
+   * @param handler The handler to be called when the operation
+   * completes. The implementation takes ownership of the handler by
+   * performing a decay-copy. The handler must be invocable with this
+   * signature:
+   * @code
+   * void handler(
+   *     const std::error_code& // Result of operation.
+   * );
+   * @endcode
+   *
+   * @note Regardless of whether the asynchronous operation completes
+   * immediately or not, the handler will not be invoked from within
+   * this function. Invocation of the handler will be performed in a
+   * manner equivalent to using `net::post`.
+   *
+   * @see [libssh2_session_disconnect_ex](https://libssh2.org/libssh2_session_disconnect_ex.html)
+   */
+  template <class CompletionToken>
+  auto async_disconnect(const std::string& reason, CompletionToken&& handler) {
+    return boost::asio::async_compose<CompletionToken, void(const std::error_code&)>(
+      detail::async_disconnect<socket_type>{socket_, session_.get(), reason}, handler, get_executor());
   }
 
 private:

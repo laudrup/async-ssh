@@ -99,41 +99,88 @@ TEST_CASE_METHOD(session_fixture, "Session disconnect") {
   using async_ssh::make_error_code;
   std::string reason{"Time to say goodbye"};
 
-  SECTION("No error") {
-    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
-                 libssh2_session_set_blocking(libssh2_session_ptr, 1))
-      .TIMES(2);
-    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
-                 libssh2_session_disconnect_ex(libssh2_session_ptr, SSH_DISCONNECT_BY_APPLICATION,
-                                               trompeloeil::_, trompeloeil::_))
-      .WITH(std::string(_3) == reason)
-      .RETURN(0)
-      .TIMES(2);
+  SECTION("Blocking") {
+    SECTION("No error") {
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_set_blocking(libssh2_session_ptr, 1))
+        .TIMES(2);
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_disconnect_ex(libssh2_session_ptr, SSH_DISCONNECT_BY_APPLICATION,
+                                                 trompeloeil::_, trompeloeil::_))
+        .WITH(std::string(_3) == reason)
+        .RETURN(0)
+        .TIMES(2);
 
-    std::error_code ec;
-    session.disconnect(reason, ec);
-    CHECK_FALSE(ec);
-    CHECK_NOTHROW(session.disconnect(reason));
+      std::error_code ec;
+      session.disconnect(reason, ec);
+      CHECK_FALSE(ec);
+      CHECK_NOTHROW(session.disconnect(reason));
+    }
+
+    SECTION("Disconnect errors") {
+      auto rc = LIBSSH2_ERROR_SOCKET_DISCONNECT;
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_set_blocking(libssh2_session_ptr, 1))
+        .TIMES(2);
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_disconnect_ex(libssh2_session_ptr, SSH_DISCONNECT_BY_APPLICATION,
+                                                 trompeloeil::_, trompeloeil::_))
+        .WITH(std::string(_3) == reason)
+        .RETURN(rc)
+        .TIMES(2);
+
+      std::error_code ec;
+      session.disconnect(reason, ec);
+      CHECK(ec == make_error_code(static_cast<async_ssh::libssh2_errors>(rc)));
+      CHECK_THROWS_MATCHES(session.disconnect(reason),
+                           std::system_error,
+                           error_code_matches(make_error_code(static_cast<async_ssh::libssh2_errors>(rc))));
+    }
   }
 
-  SECTION("Disconnect errors") {
-    auto rc = LIBSSH2_ERROR_SOCKET_DISCONNECT;
-    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
-                 libssh2_session_set_blocking(libssh2_session_ptr, 1))
-      .TIMES(2);
-    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
-                 libssh2_session_disconnect_ex(libssh2_session_ptr, SSH_DISCONNECT_BY_APPLICATION,
-                                               trompeloeil::_, trompeloeil::_))
-      .WITH(std::string(_3) == reason)
-      .RETURN(rc)
-      .TIMES(2);
+  SECTION("Async") {
+    SECTION("No error") {
+      trompeloeil::sequence seq;
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_set_blocking(libssh2_session_ptr, 0));
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_disconnect_ex(libssh2_session_ptr, SSH_DISCONNECT_BY_APPLICATION,
+                                                 trompeloeil::_, trompeloeil::_))
+        .WITH(std::string(_3) == reason)
+        .RETURN(LIBSSH2_ERROR_EAGAIN)
+        .IN_SEQUENCE(seq);
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_disconnect_ex(libssh2_session_ptr, SSH_DISCONNECT_BY_APPLICATION,
+                                                 trompeloeil::_, trompeloeil::_))
+        .WITH(std::string(_3) == reason)
+        .RETURN(LIBSSH2_ERROR_NONE)
+        .IN_SEQUENCE(seq);
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_block_directions(libssh2_session_ptr))
+        .RETURN(LIBSSH2_SESSION_BLOCK_INBOUND);
+      REQUIRE_CALL(session.socket(),
+                   async_wait_completed(boost::asio::ip::tcp::socket::wait_read))
+        .RETURN(std::error_code{});;
 
-    std::error_code ec;
-    session.disconnect(reason, ec);
-    CHECK(ec == make_error_code(static_cast<async_ssh::libssh2_errors>(rc)));
-    CHECK_THROWS_MATCHES(session.disconnect(reason),
-                         std::system_error,
-                         error_code_matches(make_error_code(static_cast<async_ssh::libssh2_errors>(rc))));
+      session.async_disconnect(reason, [](const std::error_code& ec) {
+        CHECK_FALSE(ec);
+      });
+      io_context.run();
+    }
 
+    SECTION("Disconnect errors") {
+      auto rc = LIBSSH2_ERROR_BAD_USE;
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_set_blocking(libssh2_session_ptr, 0));
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_disconnect_ex(libssh2_session_ptr, SSH_DISCONNECT_BY_APPLICATION,
+                                                 trompeloeil::_, trompeloeil::_))
+        .WITH(std::string(_3) == reason)
+        .RETURN(rc);
+      session.async_disconnect(reason, [rc](const std::error_code& ec) {
+        CHECK(ec == make_error_code(static_cast<async_ssh::libssh2_errors>(rc)));
+      });
+      io_context.run();
+    }
   }
 }
