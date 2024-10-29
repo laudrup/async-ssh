@@ -167,7 +167,7 @@ public:
    * signature:
    * @code
    * void handler(
-   *     std::error_code // Result of operation.
+   *     const std::error_code& // Result of operation.
    * );
    * @endcode
    *
@@ -180,7 +180,7 @@ public:
    */
   template <class CompletionToken>
   auto async_handshake(CompletionToken&& handler) {
-    return boost::asio::async_compose<CompletionToken, void(std::error_code)>(
+    return boost::asio::async_compose<CompletionToken, void(const std::error_code&)>(
       detail::async_handshake<socket_type>{socket_, session_.get()}, handler, get_executor());
   }
 
@@ -289,7 +289,7 @@ public:
    * signature:
    * @code
    * void handler(
-   *     std::error_code // Result of operation.
+   *     const std::error_code& // Result of operation.
    * );
    * @endcode
    *
@@ -303,7 +303,7 @@ public:
   template <class CompletionToken>
   auto async_public_key_auth(std::string_view username, const std::filesystem::path& pubkey,
                              const std::filesystem::path& privkey, CompletionToken&& handler) {
-    return boost::asio::async_compose<CompletionToken, void(std::error_code)>(
+    return boost::asio::async_compose<CompletionToken, void(const std::error_code&)>(
       detail::async_public_key_auth<socket_type>{socket_, session_.get(), username, pubkey, privkey}, handler, get_executor());
   }
 
@@ -372,7 +372,7 @@ public:
   template <class CompletionToken>
   auto async_password_auth(std::string_view username, std::string_view password,
                            CompletionToken&& handler) {
-    return boost::asio::async_compose<CompletionToken, void(std::error_code)>(
+    return boost::asio::async_compose<CompletionToken, void(const std::error_code&)>(
       detail::async_password_auth<socket_type>{socket_, session_.get(), username, password}, handler, get_executor());
   }
 
