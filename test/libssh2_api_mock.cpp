@@ -31,20 +31,8 @@ void** libssh2_session_abstract(LIBSSH2_SESSION* session) {
   return test::libssh2_api_mock_instance.libssh2_session_abstract(session);
 }
 
-void* libssh2_session_callback_set(LIBSSH2_SESSION* session, int cbtype, void* callback) {
-  return test::libssh2_api_mock_instance.libssh2_session_callback_set(session, cbtype, callback);
-}
-
 int libssh2_session_banner_set(LIBSSH2_SESSION* session, const char* banner) {
   return test::libssh2_api_mock_instance.libssh2_session_banner_set(session, banner);
-}
-
-int libssh2_banner_set(LIBSSH2_SESSION* session, const char* banner) {
-  return test::libssh2_api_mock_instance.libssh2_banner_set(session, banner);
-}
-
-int libssh2_session_startup(LIBSSH2_SESSION* session, int sock) {
-  return test::libssh2_api_mock_instance.libssh2_session_startup(session, sock);
 }
 
 int libssh2_session_handshake(LIBSSH2_SESSION* session, libssh2_socket_t sock) {
@@ -191,10 +179,6 @@ unsigned long libssh2_channel_window_read_ex(LIBSSH2_CHANNEL* channel, unsigned 
   return test::libssh2_api_mock_instance.libssh2_channel_window_read_ex(channel, read_avail, window_size_initial);
 }
 
-unsigned long libssh2_channel_receive_window_adjust(LIBSSH2_CHANNEL* channel, unsigned long adjustment, unsigned char force) {
-  return test::libssh2_api_mock_instance.libssh2_channel_receive_window_adjust(channel, adjustment, force);
-}
-
 int libssh2_channel_receive_window_adjust2(LIBSSH2_CHANNEL* channel, unsigned long adjustment, unsigned char force, unsigned int* storewindow) {
   return test::libssh2_api_mock_instance.libssh2_channel_receive_window_adjust2(channel, adjustment, force, storewindow);
 }
@@ -225,10 +209,6 @@ void libssh2_session_set_timeout(LIBSSH2_SESSION* session, long timeout) {
 
 long libssh2_session_get_timeout(LIBSSH2_SESSION* session) {
   return test::libssh2_api_mock_instance.libssh2_session_get_timeout(session);
-}
-
-void libssh2_channel_handle_extended_data(LIBSSH2_CHANNEL* channel, int ignore_mode) {
-  return test::libssh2_api_mock_instance.libssh2_channel_handle_extended_data(channel, ignore_mode);
 }
 
 int libssh2_channel_handle_extended_data2(LIBSSH2_CHANNEL* channel, int ignore_mode) {
@@ -269,10 +249,6 @@ int libssh2_channel_wait_closed(LIBSSH2_CHANNEL* channel) {
 
 int libssh2_channel_free(LIBSSH2_CHANNEL* channel) {
   return test::libssh2_api_mock_instance.libssh2_channel_free(channel);
-}
-
-LIBSSH2_CHANNEL* libssh2_scp_recv(LIBSSH2_SESSION* session, const char* path, struct stat* sb) {
-  return test::libssh2_api_mock_instance.libssh2_scp_recv(session, path, sb);
 }
 
 LIBSSH2_CHANNEL* libssh2_scp_recv2(LIBSSH2_SESSION* session, const char* path, libssh2_struct_stat* sb) {

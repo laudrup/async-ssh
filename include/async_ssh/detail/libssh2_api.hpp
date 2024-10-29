@@ -26,16 +26,9 @@ LIBSSH2_SESSION* libssh2_session_init_ex(libssh2_alloc_func my_alloc,
 
 void** libssh2_session_abstract(LIBSSH2_SESSION *session);
 
-void* libssh2_session_callback_set(LIBSSH2_SESSION *session,
-                                   int cbtype, void *callback);
-
-int libssh2_session_banner_set(LIBSSH2_SESSION *session,
-                               const char *banner);
-
 int libssh2_banner_set(LIBSSH2_SESSION *session,
                        const char *banner);
 
-int libssh2_session_startup(LIBSSH2_SESSION *session, int sock);
 int libssh2_session_handshake(LIBSSH2_SESSION *session,
                               libssh2_socket_t sock);
 
@@ -198,10 +191,6 @@ unsigned long libssh2_channel_window_read_ex(LIBSSH2_CHANNEL *channel,
                                              unsigned long *read_avail,
                                              unsigned long *window_size_initial);
 
-unsigned long libssh2_channel_receive_window_adjust(LIBSSH2_CHANNEL *channel,
-                                                    unsigned long adjustment,
-                                                    unsigned char force);
-
 int libssh2_channel_receive_window_adjust2(LIBSSH2_CHANNEL *channel,
                                            unsigned long adjustment,
                                            unsigned char force,
@@ -224,9 +213,6 @@ void libssh2_session_set_timeout(LIBSSH2_SESSION* session, long timeout);
 
 long libssh2_session_get_timeout(LIBSSH2_SESSION* session);
 
-
-void libssh2_channel_handle_extended_data(LIBSSH2_CHANNEL *channel,
-                                          int ignore_mode);
 
 int libssh2_channel_handle_extended_data2(LIBSSH2_CHANNEL *channel,
                                           int ignore_mode);
@@ -255,10 +241,6 @@ int libssh2_channel_close(LIBSSH2_CHANNEL *channel);
 int libssh2_channel_wait_closed(LIBSSH2_CHANNEL *channel);
 
 int libssh2_channel_free(LIBSSH2_CHANNEL *channel);
-
-LIBSSH2_CHANNEL* libssh2_scp_recv(LIBSSH2_SESSION *session,
-                                  const char *path,
-                                  struct stat *sb);
 
 LIBSSH2_CHANNEL* libssh2_scp_recv2(LIBSSH2_SESSION *session,
                                    const char *path,

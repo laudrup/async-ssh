@@ -26,20 +26,8 @@ inline void** libssh2_session_abstract(LIBSSH2_SESSION* session) {
   return ::libssh2_session_abstract(session);
 }
 
-inline void* libssh2_session_callback_set(LIBSSH2_SESSION* session, int cbtype, void* callback) {
-  return ::libssh2_session_callback_set(session, cbtype, callback);
-}
-
 inline int libssh2_session_banner_set(LIBSSH2_SESSION* session, const char* banner) {
   return ::libssh2_session_banner_set(session, banner);
-}
-
-inline int libssh2_banner_set(LIBSSH2_SESSION* session, const char* banner) {
-  return ::libssh2_banner_set(session, banner);
-}
-
-inline int libssh2_session_startup(LIBSSH2_SESSION* session, int sock) {
-  return ::libssh2_session_startup(session, sock);
 }
 
 inline int libssh2_session_handshake(LIBSSH2_SESSION* session, libssh2_socket_t sock) {
@@ -186,10 +174,6 @@ inline unsigned long libssh2_channel_window_read_ex(LIBSSH2_CHANNEL* channel, un
   return ::libssh2_channel_window_read_ex(channel, read_avail, window_size_initial);
 }
 
-inline unsigned long libssh2_channel_receive_window_adjust(LIBSSH2_CHANNEL* channel, unsigned long adjustment, unsigned char force) {
-  return ::libssh2_channel_receive_window_adjust(channel, adjustment, force);
-}
-
 inline int libssh2_channel_receive_window_adjust2(LIBSSH2_CHANNEL* channel, unsigned long adjustment, unsigned char force, unsigned int* storewindow) {
   return ::libssh2_channel_receive_window_adjust2(channel, adjustment, force, storewindow);
 }
@@ -220,10 +204,6 @@ inline void libssh2_session_set_timeout(LIBSSH2_SESSION* session, long timeout) 
 
 inline long libssh2_session_get_timeout(LIBSSH2_SESSION* session) {
   return ::libssh2_session_get_timeout(session);
-}
-
-inline void libssh2_channel_handle_extended_data(LIBSSH2_CHANNEL* channel, int ignore_mode) {
-  return ::libssh2_channel_handle_extended_data(channel, ignore_mode);
 }
 
 inline int libssh2_channel_handle_extended_data2(LIBSSH2_CHANNEL* channel, int ignore_mode) {
@@ -264,10 +244,6 @@ inline int libssh2_channel_wait_closed(LIBSSH2_CHANNEL* channel) {
 
 inline int libssh2_channel_free(LIBSSH2_CHANNEL* channel) {
   return ::libssh2_channel_free(channel);
-}
-
-inline LIBSSH2_CHANNEL* libssh2_scp_recv(LIBSSH2_SESSION* session, const char* path, struct stat* sb) {
-  return ::libssh2_scp_recv(session, path, sb);
 }
 
 inline LIBSSH2_CHANNEL* libssh2_scp_recv2(LIBSSH2_SESSION* session, const char* path, libssh2_struct_stat* sb) {

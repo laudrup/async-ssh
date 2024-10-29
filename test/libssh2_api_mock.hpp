@@ -20,11 +20,7 @@ public:
                                async_ssh::detail::libssh2_api::libssh2_realloc_func,
                                void *));
   MAKE_MOCK1(libssh2_session_abstract, void **(LIBSSH2_SESSION *));
-  MAKE_MOCK3(libssh2_session_callback_set,
-             void *(LIBSSH2_SESSION *, int, void *));
   MAKE_MOCK2(libssh2_session_banner_set, int(LIBSSH2_SESSION *, const char *));
-  MAKE_MOCK2(libssh2_banner_set, int(LIBSSH2_SESSION *, const char *));
-  MAKE_MOCK2(libssh2_session_startup, int(LIBSSH2_SESSION *, int));
   MAKE_MOCK2(libssh2_session_handshake,
              int(LIBSSH2_SESSION *, libssh2_socket_t));
   MAKE_MOCK4(libssh2_session_disconnect_ex,
@@ -100,8 +96,6 @@ public:
   MAKE_MOCK3(libssh2_channel_window_read_ex,
              unsigned long(LIBSSH2_CHANNEL *, unsigned long *,
                            unsigned long *));
-  MAKE_MOCK3(libssh2_channel_receive_window_adjust,
-             unsigned long(LIBSSH2_CHANNEL *, unsigned long, unsigned char));
   MAKE_MOCK4(libssh2_channel_receive_window_adjust2,
              int(LIBSSH2_CHANNEL *, unsigned long, unsigned char,
                  unsigned int *));
@@ -114,8 +108,6 @@ public:
   MAKE_MOCK2(libssh2_channel_set_blocking, void(LIBSSH2_CHANNEL *, int));
   MAKE_MOCK2(libssh2_session_set_timeout, void(LIBSSH2_SESSION *, long));
   MAKE_MOCK1(libssh2_session_get_timeout, long(LIBSSH2_SESSION *));
-  MAKE_MOCK2(libssh2_channel_handle_extended_data,
-             void(LIBSSH2_CHANNEL *, int));
   MAKE_MOCK2(libssh2_channel_handle_extended_data2,
              int(LIBSSH2_CHANNEL *, int));
   MAKE_MOCK2(libssh2_channel_flush_ex, int(LIBSSH2_CHANNEL *, int));
@@ -129,8 +121,6 @@ public:
   MAKE_MOCK1(libssh2_channel_close, int(LIBSSH2_CHANNEL *));
   MAKE_MOCK1(libssh2_channel_wait_closed, int(LIBSSH2_CHANNEL *));
   MAKE_MOCK1(libssh2_channel_free, int(LIBSSH2_CHANNEL *));
-  MAKE_MOCK3(libssh2_scp_recv,
-             LIBSSH2_CHANNEL *(LIBSSH2_SESSION *, const char *, struct stat *));
   MAKE_MOCK3(libssh2_scp_recv2,
              LIBSSH2_CHANNEL *(LIBSSH2_SESSION *, const char *,
                                libssh2_struct_stat *));
