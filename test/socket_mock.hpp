@@ -46,11 +46,12 @@ public:
   // https://github.com/rollbear/trompeloeil/issues/110
   template <class WaitToken>
   void async_wait(boost::asio::ip::tcp::socket::wait_type w, WaitToken&& token) {
-    boost::asio::post([this, w, tok = std::move(token)]() mutable {
+    auto e = get_executor();
+    boost::asio::post(e, [this, w, tok = std::move(token)]() mutable {
       const auto rc = async_wait_completed(w);
       tok(rc);
     });
-  };
+  }
 
   boost::asio::io_context& io_context;
   libssh2_socket_t socket_handle = static_cast<libssh2_socket_t>(0x2ULL);

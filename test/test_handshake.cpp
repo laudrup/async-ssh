@@ -56,27 +56,79 @@ TEST_CASE_METHOD(session_fixture, "Session handshake") {
   }
 
   SECTION("Async handshake") {
-    trompeloeil::sequence seq;
-    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
-                 libssh2_session_set_blocking(libssh2_session_ptr, 0));
-    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
-                 libssh2_session_handshake(libssh2_session_ptr, session.socket().socket_handle))
-      .RETURN(LIBSSH2_ERROR_EAGAIN)
-      .IN_SEQUENCE(seq);
-    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
-                 libssh2_session_handshake(libssh2_session_ptr, session.socket().socket_handle))
-      .RETURN(LIBSSH2_ERROR_NONE)
-      .IN_SEQUENCE(seq);
-    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
-                 libssh2_session_block_directions(libssh2_session_ptr))
-      .RETURN(LIBSSH2_SESSION_BLOCK_INBOUND);
-    REQUIRE_CALL(session.socket(),
-                 async_wait_completed(boost::asio::ip::tcp::socket::wait_read))
-      .RETURN(std::error_code{});
+    std::error_code error{};
 
-    session.async_handshake([](const std::error_code& ec) {
-      CHECK_FALSE(ec);
-    });
-    io_context.run();
+    SECTION("No errors") {
+      trompeloeil::sequence seq;
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_set_blocking(libssh2_session_ptr, 0));
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_handshake(libssh2_session_ptr, session.socket().socket_handle))
+        .RETURN(LIBSSH2_ERROR_EAGAIN)
+        .IN_SEQUENCE(seq);
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_handshake(libssh2_session_ptr, session.socket().socket_handle))
+        .RETURN(LIBSSH2_ERROR_NONE)
+        .IN_SEQUENCE(seq);
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_block_directions(libssh2_session_ptr))
+        .RETURN(LIBSSH2_SESSION_BLOCK_INBOUND);
+      REQUIRE_CALL(session.socket(),
+                   async_wait_completed(boost::asio::ip::tcp::socket::wait_read))
+        .RETURN(std::error_code{});
+
+      error = make_error_code(std::errc::connection_aborted);
+      session.async_handshake([&error](const std::error_code& ec) {
+        error = ec;
+      });
+      CHECK(io_context.run() == 1);
+      CHECK_FALSE(error);
+    }
+
+    SECTION("Socket failure") {
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_set_blocking(libssh2_session_ptr, 0));
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_handshake(libssh2_session_ptr, session.socket().socket_handle))
+        .RETURN(LIBSSH2_ERROR_EAGAIN);
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_block_directions(libssh2_session_ptr))
+        .RETURN(LIBSSH2_SESSION_BLOCK_INBOUND);
+      REQUIRE_CALL(session.socket(),
+                   async_wait_completed(boost::asio::ip::tcp::socket::wait_read))
+        .RETURN(std::make_error_code(std::errc::connection_aborted));
+
+      session.async_handshake([&error](const std::error_code& ec) {
+        error = ec;
+      });
+      CHECK(io_context.run() == 1);
+      CHECK(error == make_error_code(std::errc::connection_aborted));
+    }
+
+    SECTION("Handshake function failure") {
+      trompeloeil::sequence seq;
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_set_blocking(libssh2_session_ptr, 0));
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_handshake(libssh2_session_ptr, session.socket().socket_handle))
+        .RETURN(LIBSSH2_ERROR_EAGAIN)
+        .IN_SEQUENCE(seq);
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_handshake(libssh2_session_ptr, session.socket().socket_handle))
+        .RETURN(LIBSSH2_ERROR_SOCKET_DISCONNECT)
+        .IN_SEQUENCE(seq);
+      REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                   libssh2_session_block_directions(libssh2_session_ptr))
+        .RETURN(LIBSSH2_SESSION_BLOCK_INBOUND);
+      REQUIRE_CALL(session.socket(),
+                   async_wait_completed(boost::asio::ip::tcp::socket::wait_read))
+        .RETURN(std::error_code{});
+
+      session.async_handshake([&error](const std::error_code& ec) {
+        error = ec;
+      });
+      CHECK(io_context.run() == 1);
+      CHECK(error == make_error_code(static_cast<async_ssh::libssh2_errors>(LIBSSH2_ERROR_SOCKET_DISCONNECT)));
+    }
   }
 }
