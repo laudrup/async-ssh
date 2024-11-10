@@ -17,6 +17,7 @@
 #include <system_error>
 
 using async_ssh::test::session_fixture;
+using mock_session = async_ssh::basic_session<async_ssh::test::socket_mock>;
 
 TEST_CASE("Session init") {
   boost::asio::io_context ctx;
@@ -31,14 +32,14 @@ TEST_CASE("Session init") {
                  libssh2_session_free(ptr))
       .RETURN(0);
 
-    CHECK_NOTHROW(async_ssh::session<async_ssh::test::socket_mock>(ctx));
+    CHECK_NOTHROW(mock_session(ctx));
   }
 
   SECTION("Allocation failure") {
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_session_init_ex(nullptr, nullptr, nullptr, nullptr))
       .RETURN(nullptr);
-  CHECK_THROWS_AS(async_ssh::session<async_ssh::test::socket_mock>(ctx), std::bad_alloc);
+  CHECK_THROWS_AS(mock_session(ctx), std::bad_alloc);
   }
 
   SECTION("Move") {
@@ -51,10 +52,10 @@ TEST_CASE("Session init") {
       .RETURN(0)
       .TIMES(2);
 
-    async_ssh::session<async_ssh::test::socket_mock> session(ctx);
+    mock_session session(ctx);
     auto moved_object(std::move(session));
 
-    async_ssh::session<async_ssh::test::socket_mock> another_session(ctx);
+    mock_session another_session(ctx);
     another_session = std::move(moved_object);
   }
 }

@@ -100,7 +100,7 @@ public:
   }
 
 private:
-  template<class SocketType> friend class session;
+  template<class SocketType> friend class basic_session;
   explicit channel(LIBSSH2_CHANNEL* libssh2_channel)
     : channel_(libssh2_channel, api::libssh2_channel_free) {
   }

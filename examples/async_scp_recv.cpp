@@ -103,7 +103,7 @@ private:
     // Gracefully shutdown the SSH connection
     session_.disconnect("Goodbye");
   }
-  async_ssh::session<tcp::socket> session_;
+  async_ssh::session session_;
   std::filesystem::path path_;
 };
 

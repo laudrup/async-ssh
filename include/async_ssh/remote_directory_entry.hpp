@@ -55,7 +55,7 @@ public:
   }
 
 private:
-  template<typename Socket> friend class session;
+  template<typename Socket> friend class basic_session;
   libssh2_struct_stat stat_{};
 };
 } // namespace async_ssh

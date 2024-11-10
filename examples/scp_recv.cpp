@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
     boost::asio::io_context io_context;
     boost::asio::ip::tcp::resolver resolver(io_context);
     boost::asio::ip::tcp::resolver::results_type endpoints = resolver.resolve(host, "ssh");
-    async_ssh::session<boost::asio::ip::tcp::socket> session(io_context);
+    async_ssh::session session(io_context);
     boost::asio::connect(session.socket(), endpoints);
 
     // SSH handshake is required before authentication and any other

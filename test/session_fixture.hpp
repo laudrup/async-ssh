@@ -48,7 +48,7 @@ private:
 
 protected:
   boost::asio::io_context io_context;
-  async_ssh::session<socket_mock> session;
+  async_ssh::basic_session<socket_mock> session;
 };
 
 } // namespace async_ssh::test

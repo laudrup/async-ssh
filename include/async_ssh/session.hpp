@@ -48,9 +48,9 @@ namespace api = detail::libssh2_api;
  * Typically a [boost::asio::ip::tcp::socket](https://www.boost.org/doc/libs/release/doc/html/boost_asio/reference/ip__tcp/socket.html)
  */
 template <class Socket>
-class session {
+class basic_session {
 public:
-  /// The type of the next layer.
+  /// The type of the socket.
   using socket_type = typename std::remove_reference<Socket>::type;
 
   /// The type of the executor associated with the object.
@@ -69,7 +69,7 @@ public:
    * @throws std::bad_alloc On storage allocation failures.
    */
   template <class Arg>
-  explicit session(Arg&& arg)
+  explicit basic_session(Arg&& arg)
     : socket_(std::forward<Arg>(arg))
     , session_(api::libssh2_session_init(),
                api::libssh2_session_free) {
@@ -78,10 +78,12 @@ public:
       throw std::bad_alloc{};
     }
   }
-  session(const session&) = delete;
-  session& operator=(const session&) = delete;
-  session(session&&) noexcept = default;
-  session& operator=(session&&) noexcept = default;
+
+  basic_session() = default;
+  basic_session(const basic_session&) = delete;
+  basic_session& operator=(const basic_session&) = delete;
+  basic_session(basic_session&&) noexcept = default;
+  basic_session& operator=(basic_session&&) noexcept = default;
 
   /** Get the executor associated with the object.
    *
@@ -489,6 +491,8 @@ private:
   socket_type socket_;
   std::unique_ptr<LIBSSH2_SESSION, decltype(&detail::libssh2_api::libssh2_session_free)> session_;
 };
+
+using session = basic_session<boost::asio::ip::tcp::socket>;
 
 } // namespace async_ssh
 

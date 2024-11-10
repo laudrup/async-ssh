@@ -1,17 +1,18 @@
 Classes
 =======
 
-session
--------
-.. doxygenclass:: async_ssh::session
+async_ssh::session
+------------------
+.. doxygentypedef:: async_ssh::session
+.. doxygenclass:: async_ssh::basic_session
    :members:
 
-channel
--------
+async_ssh::channel
+------------------
 .. doxygenclass:: async_ssh::channel
    :members:
 
-remote_directory_entry
-----------------------
+async_ssh::remote_directory_entry
+---------------------------------
 .. doxygenclass:: async_ssh::remote_directory_entry
    :members:
