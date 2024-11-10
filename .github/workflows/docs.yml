@@ -24,14 +24,7 @@ jobs:
         libssh2-1-dev \
         python3-pip
     - name: Install PIP packages
-      # TODO: Consider using requirements.txt to ensure specific versions are used
-      run: |
-        sudo pip3 install \
-        sphinx \
-        breathe \
-        sphinx_bootstrap_theme \
-        sphinx_jinja \
-        sphinxcontrib_jquery
+      run: sudo pip3 install -r doc/requirements.txt
     - name: Configure build system
       run: cmake -DBUILD_DOCUMENTATION=ON -B build
     - name: Build documentation
