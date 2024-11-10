@@ -79,6 +79,13 @@ public:
     }
   }
 
+  ~basic_session() {
+    // Unfortunately the call to libssh2_session_free might block.
+    if (session_) {
+      api::libssh2_session_set_blocking(session_.get(), 1);
+    }
+  }
+
   basic_session() = default;
   basic_session(const basic_session&) = delete;
   basic_session& operator=(const basic_session&) = delete;

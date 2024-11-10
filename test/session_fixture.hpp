@@ -34,6 +34,8 @@ public:
                                                           libssh2_session_init_ex(nullptr, nullptr, nullptr, nullptr))
                                        .LR_RETURN(libssh2_session_ptr),
                                        NAMED_REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                                                          libssh2_session_set_blocking(libssh2_session_ptr, 1)),
+                                       NAMED_REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                                                           libssh2_session_free(libssh2_session_ptr))
                                        .RETURN(0))
       }

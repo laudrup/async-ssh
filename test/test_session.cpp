@@ -27,7 +27,8 @@ TEST_CASE("Session init") {
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_session_init_ex(nullptr, nullptr, nullptr, nullptr))
       .RETURN(ptr);
-
+    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                 libssh2_session_set_blocking(ptr, 1));
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_session_free(ptr))
       .RETURN(0);
@@ -47,6 +48,8 @@ TEST_CASE("Session init") {
                  libssh2_session_init_ex(nullptr, nullptr, nullptr, nullptr))
       .RETURN(ptr)
       .TIMES(2);
+    REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
+                 libssh2_session_set_blocking(ptr, 1));
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_session_free(ptr))
       .RETURN(0)
