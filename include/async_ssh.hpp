@@ -4,5 +4,6 @@
 #include <async_ssh/channel.hpp>
 #include <async_ssh/error.hpp>
 #include <async_ssh/session.hpp>
+#include <async_ssh/stream.hpp>
 
 #endif // ASYNC_SSH_HPP

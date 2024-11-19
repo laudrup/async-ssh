@@ -4,6 +4,7 @@
 
 #include <boost/asio.hpp>
 
+#include <algorithm>
 #include <iostream>
 #include <system_error>
 #include <utility>
@@ -95,7 +96,8 @@ private:
     size_t total_read = 0;
     while (total_read < entry.size()) {
       std::array<char, 1024> mem{};
-      auto read = channel.read_some(boost::asio::buffer(mem));
+      auto amount = std::min(mem.size(), entry.size() - total_read);
+      auto read = boost::asio::read(channel.std_stream(), boost::asio::buffer(mem, amount));
       std::cout << std::string(mem.data(), mem.size());
       total_read += read;
     }

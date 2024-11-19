@@ -56,6 +56,9 @@ public:
   /// The type of the executor associated with the object.
   using executor_type = typename std::remove_reference<socket_type>::type::executor_type;
 
+  /// The channel type used by this session
+  using channel = async_ssh::basic_channel<socket_type>;
+
   /** Construct a session.
    *
    * This constructor creates a session and initialises the underlying
@@ -397,7 +400,7 @@ public:
    *
    * @see [libssh2_scp_recv2](https://libssh2.org/libssh2_scp_recv2.html)
    */
-  std::tuple<async_ssh::channel, async_ssh::remote_directory_entry> scp_recv(const std::filesystem::path& path, std::error_code& ec) {
+  std::tuple<channel, async_ssh::remote_directory_entry> scp_recv(const std::filesystem::path& path, std::error_code& ec) {
     api::libssh2_session_set_blocking(handle(), 1);
     remote_directory_entry entry{};
     LIBSSH2_CHANNEL* chan = api::libssh2_scp_recv2(handle(), path.c_str(), &entry.stat_);
@@ -406,7 +409,7 @@ public:
     } else {
       ec = {};
     }
-    return {channel{chan}, entry};
+    return {channel{chan, socket_}, entry};
   }
 
   /** Request a remote file via SCP
@@ -420,9 +423,9 @@ public:
    *
    * @see [libssh2_scp_recv2](https://libssh2.org/libssh2_scp_recv2.html)
    */
-  std::tuple<async_ssh::channel, async_ssh::remote_directory_entry> scp_recv(const std::filesystem::path& path) {
+  std::tuple<channel, async_ssh::remote_directory_entry> scp_recv(const std::filesystem::path& path) {
     std::error_code ec;
-    std::tuple<async_ssh::channel, async_ssh::remote_directory_entry> ret = scp_recv(path, ec);
+    std::tuple<channel, async_ssh::remote_directory_entry> ret = scp_recv(path, ec);
     detail::throw_on_error(ec, "scp_recv");
     return ret;
   }

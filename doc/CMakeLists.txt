@@ -13,6 +13,7 @@ set(ASYNC_SSH_PUBLIC_HEADERS
   ${DOXYGEN_INPUT_DIR}/hostkey_hash_type.hpp
   ${DOXYGEN_INPUT_DIR}/remote_directory_entry.hpp
   ${DOXYGEN_INPUT_DIR}/session.hpp
+  ${DOXYGEN_INPUT_DIR}/stream.hpp
 )
 
 string(REPLACE ";" " " DOXYGEN_INPUT_FILES "${ASYNC_SSH_PUBLIC_HEADERS}")

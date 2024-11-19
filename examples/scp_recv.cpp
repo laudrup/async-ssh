@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
     while (total_read < entry.size()) {
       std::array<char, 1024> mem{};
       auto amount = std::min(mem.size(), entry.size() - total_read);
-      auto read = boost::asio::read(channel, boost::asio::buffer(mem, amount));
+      auto read = boost::asio::read(channel.std_stream(), boost::asio::buffer(mem, amount));
       ofs.write(mem.data(), static_cast<std::streamsize>(read));
       total_read += read;
     }

@@ -37,7 +37,7 @@ TEST_CASE_METHOD(session_fixture, "channel") {
     std::error_code ec;
     auto [channel, entry] = session.scp_recv(path, ec);
     std::array<char, 1024> mem{};
-    channel.read_some(boost::asio::buffer(mem));
+    channel.std_stream().read_some(boost::asio::buffer(mem));
   }
 
   SECTION("Read some") {
@@ -50,7 +50,7 @@ TEST_CASE_METHOD(session_fixture, "channel") {
     std::error_code ec;
     auto [channel, entry] = session.scp_recv(path, ec);
     std::array<char, 1024> mem{};
-    auto read = channel.read_some(boost::asio::buffer(mem));
+    auto read = channel.std_stream().read_some(boost::asio::buffer(mem));
     CHECK(read == str.size());
     CHECK(std::string(mem.data(), read) == str);
   }

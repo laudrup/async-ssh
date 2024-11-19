@@ -2,6 +2,7 @@
 #define ASYNC_SSH_CHANNEL_HPP
 
 #include <async_ssh/error.hpp>
+#include <async_ssh/stream.hpp>
 
 #include <async_ssh/detail/libssh2_init.hpp>
 #include <async_ssh/detail/libssh2_api.hpp>
@@ -18,75 +19,25 @@ namespace api = detail::libssh2_api;
 
 /** The channel class represents an open SSH channel for receiving and
  * sending data to the remote server.
- *
  */
-class channel {
+template<class Socket>
+class basic_channel {
 public:
-  ~channel() = default;
-  channel(const channel&) = delete;
-  channel& operator=(const channel&) = delete;
-  channel(channel&&) noexcept = default;
-  channel& operator=(channel&&) noexcept = default;
 
-  /** Read some data from the channel.
-   *
-   * This function is used to read data from the channel. The function
-   * call will block until one or more bytes of data has been read
-   * successfully, or until an error occurs.
-   *
-   * @param ec Set to indicate what error occurred, if any.
-   * @param buffers The buffers into which the data will be read.
-   *
-   * @returns The number of bytes read.
-   *
-   * @note The `read_some` operation may not read all of the requested
-   * number of bytes. Consider using the `net::read` function if you
-   * need to ensure that the requested amount of data is read before
-   * the blocking operation completes.
-   *
-   * @see [libssh2_channel_read](https://libssh2.org/libssh2_channel_read.html)
-   */
-  template <class MutableBufferSequence>
-  size_t read_some(const MutableBufferSequence& buffers, std::error_code& ec) {
-    size_t total_bytes_read = 0;
-    for (auto&& buf : buffers) {
-      auto rc = api::libssh2_channel_read(handle(), static_cast<char*>(buf.data()), buf.size());
-      if (rc < 0) {
-        ec = std::error_code(static_cast<int>(rc), libssh2_error_category());
-        return total_bytes_read;
-      }
-      total_bytes_read += rc;
-    }
-    ec = {};
-    return total_bytes_read;
-  }
+  /// Constructs a channel without any associated @ref session.
+  basic_channel() = default;
 
-  /** Read some data from the channel.
-   *
-   * This function is used to read data from the channel. The function
-   * call will block until one or more bytes of data has been read
-   * successfully, or until an error occurs.
-   *
-   * @param buffers The buffers into which the data will be read.
-   *
-   * @returns The number of bytes read.
-   *
-   * @throws std::system_error Thrown on failure.
-   *
-   * @note The `read_some` operation may not read all of the requested
-   * number of bytes. Consider using the `net::read` function if you
-   * need to ensure that the requested amount of data is read before
-   * the blocking operation completes.
-   *
-   * @see [libssh2_channel_read](https://libssh2.org/libssh2_channel_read.html)
-   */
-  template <class MutableBufferSequence>
-  size_t read_some(const MutableBufferSequence& buffers) {
-    std::error_code ec;
-    auto bytes_read = read_some(buffers, ec);
-    detail::throw_on_error(ec, "read_some");
-    return bytes_read;
-  }
+  /// Destroys the channel and any open @ref stream.
+  ~basic_channel() = default;
+
+  /// Move construct a @ref channel from another.
+  basic_channel(basic_channel&&) noexcept = default;
+
+  /// Move assing a @ref channel from another.
+  basic_channel& operator=(basic_channel&&) noexcept = default;
+
+  basic_channel(const basic_channel&) = delete;
+  basic_channel& operator=(const basic_channel&) = delete;
 
   /** Get a pointer to the libssh2 channel being used by this object.
    *
@@ -99,13 +50,38 @@ public:
     return channel_.get();
   }
 
-private:
-  template<class SocketType> friend class basic_session;
-  explicit channel(LIBSSH2_CHANNEL* libssh2_channel)
-    : channel_(libssh2_channel, api::libssh2_channel_free) {
+  /** Get a reference to the standard I/O substream for reading and
+   * writing to and from the channel.
+   *
+   * @return A reference to the the standard I/O substream. Ownership
+   * is not transferred to the caller.
+   */
+  stream<Socket>& std_stream() {
+    return std_stream_;
   }
 
-  std::unique_ptr<LIBSSH2_CHANNEL, decltype(&detail::libssh2_api::libssh2_channel_free)> channel_;
+  /** Get a reference to the error I/O substream for reading and
+   * writing to and from the channel.
+   *
+   * @return A reference to the the error I/O substream. Ownership is
+   * not transferred to the caller.
+   */
+  stream<Socket>& err_stream() {
+    return err_stream_;
+  }
+
+private:
+  template<typename SocketType> friend class basic_session;
+
+  basic_channel(LIBSSH2_CHANNEL* libssh2_channel, Socket& socket)
+    : channel_(libssh2_channel, api::libssh2_channel_free)
+    , std_stream_(&socket, channel_.get(), 0)
+    , err_stream_(&socket, channel_.get(), SSH_EXTENDED_DATA_STDERR) {
+  }
+
+  std::unique_ptr<LIBSSH2_CHANNEL, decltype(&api::libssh2_channel_free)> channel_{nullptr, api::libssh2_channel_free};
+  stream<Socket> std_stream_;
+  stream<Socket> err_stream_;
 };
 
 } // namespace async_ssh
