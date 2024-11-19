@@ -4,9 +4,12 @@
 
 #include <boost/asio.hpp>
 
+#include <algorithm>
 #include <cstdlib>
 #include <exception>
 #include <filesystem>
+#include <fstream>
+#include <ios>
 #include <iostream>
 #include <string>
 #include <string_view>
@@ -80,12 +83,18 @@ int main(int argc, char* argv[]) {
 
     auto [channel, entry] = session.scp_recv(scppath);
     size_t total_read = 0;
+    std::ofstream ofs{scppath.filename()};
     while (total_read < entry.size()) {
       std::array<char, 1024> mem{};
-      auto read = channel.read_some(boost::asio::buffer(mem));
-      std::cout << std::string(mem.data(), mem.size());
+      auto amount = std::min(mem.size(), entry.size() - total_read);
+      auto read = boost::asio::read(channel, boost::asio::buffer(mem, amount));
+      ofs.write(mem.data(), static_cast<std::streamsize>(read));
       total_read += read;
     }
+
+    // Set the available file permissions
+    ofs.close();
+    std::filesystem::permissions(scppath.filename(), entry.permissions());
 
     // Gracefully shutdown the SSH connection
     session.disconnect("Goodbye");
