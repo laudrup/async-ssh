@@ -7,6 +7,7 @@ jobs:
       fail-fast: false
       matrix:
         compiler: [gcc, clang]
+        boost_version: ["1.77.0", "1.84.0", "1.86.0"]
 
     runs-on: ubuntu-latest
 
@@ -25,8 +26,12 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get -yq install \
-        libssh2-1-dev \
-        libboost-all-dev
+        libssh2-1-dev
+    - name: Install Boost
+      id: install-boost
+      uses: MarkusJx/install-boost@v2.4.5
+      with:
+        boost_version: ${{matrix.boost_version}}
     - name: Set conditional environment variables
       if: matrix.compiler == 'clang'
       run: |
@@ -34,6 +39,8 @@ jobs:
         echo "CXX=clang++" >> $GITHUB_ENV
     - name: Configure
       run: cmake -B build
+      env:
+        BOOST_ROOT: ${{steps.install-boost.outputs.BOOST_ROOT}}
     - name: Build
       run: cmake --build build/
     - name: Run tests

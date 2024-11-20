@@ -18,6 +18,10 @@ cmake -Bbuild
 cmake --build build
 ```
 
+# Requirements
+
+Currently at least boost 1.77 is required.
+
 # License
 Boost Software License 1.0.
 

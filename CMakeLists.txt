@@ -15,7 +15,7 @@ project(
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 find_package(Libssh2 REQUIRED)
-find_package(Boost CONFIG REQUIRED)
+find_package(Boost REQUIRED)
 
 include(cmake/project-is-top-level.cmake)
 include(cmake/variables.cmake)

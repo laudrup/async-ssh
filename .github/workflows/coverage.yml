@@ -19,10 +19,16 @@ jobs:
         sudo apt-get update
         sudo apt-get -yq install \
         libssh2-1-dev \
-        libboost-all-dev \
         lcov
+    - name: Install Boost
+      id: install-boost
+      uses: MarkusJx/install-boost@v2.4.5
+      with:
+        boost_version: 1.84.0
     - name: Configure
       run: cmake -DENABLE_COVERAGE=ON -B build
+      env:
+        BOOST_ROOT: ${{steps.install-boost.outputs.BOOST_ROOT}}
     - name: Build
       run: cmake --build build
     - name: Test
