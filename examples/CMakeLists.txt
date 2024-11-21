@@ -4,7 +4,6 @@ function(add_example target)
     async_ssh
     compiler_warnings
   )
-  target_compile_features(${target} PRIVATE cxx_std_17)
 
   if(WIN32)
     target_sources(${target} PRIVATE os_util_win32.cpp)

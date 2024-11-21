@@ -52,9 +52,6 @@ target_compile_definitions(unittest PRIVATE
   ASYNC_SSH_MOCK_LIBSSH2_API
   CATCH_CONFIG_ENABLE_ALL_STRINGMAKERS
 )
-target_compile_features(unittest PRIVATE
-  cxx_std_17
-)
 if(WIN32)
   target_compile_definitions(unittest PRIVATE
     NOMINMAX
