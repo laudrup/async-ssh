@@ -9,6 +9,10 @@ function(add_example target)
   if(WIN32)
     target_sources(${target} PRIVATE os_util_win32.cpp)
     target_link_libraries(${target} PRIVATE userenv)
+    target_compile_definitions(${target} PRIVATE
+      NOMINMAX
+      WIN32_LEAN_AND_MEAN
+    )
   else()
     target_sources(${target} PRIVATE os_util_posix.cpp)
   endif()

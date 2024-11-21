@@ -55,6 +55,12 @@ target_compile_definitions(unittest PRIVATE
 target_compile_features(unittest PRIVATE
   cxx_std_17
 )
+if(WIN32)
+  target_compile_definitions(unittest PRIVATE
+    NOMINMAX
+    WIN32_LEAN_AND_MEAN
+  )
+endif()
 
 if(ENABLE_COVERAGE)
   target_link_libraries(unittest PRIVATE
