@@ -78,13 +78,14 @@ TEST_CASE_METHOD(session_fixture, "scp") {
           { "rwxr-xr-x", 0755 }
     }));
 
+    auto st_mode = mode;
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_session_set_blocking(libssh2_session_ptr, 1));
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_scp_recv2(libssh2_session_ptr,
                                    trompeloeil::eq<const char*>(path.string()),
                                    trompeloeil::_))
-      .LR_SIDE_EFFECT(_3->st_mode = mode)
+      .LR_SIDE_EFFECT(_3->st_mode = st_mode)
       .LR_SIDE_EFFECT(_3->st_mtime = mtime)
       .LR_SIDE_EFFECT(_3->st_atime = atime)
       .LR_SIDE_EFFECT(_3->st_size = size)
