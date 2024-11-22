@@ -69,7 +69,7 @@ TEST_CASE_METHOD(session_fixture, "scp") {
     const std::time_t atime = 1728822518;
     const std::size_t size = 18374625329;
 
-    auto [str, mode] = GENERATE(table<std::string, unsigned short>({
+    auto [str, mode] = GENERATE(table<std::string, unsigned>({
           { "rw-rw-rw-", 0666 },
           { "---------", 0000 },
           { "---r-----", 0040 },
@@ -78,7 +78,7 @@ TEST_CASE_METHOD(session_fixture, "scp") {
           { "rwxr-xr-x", 0755 }
     }));
 
-    auto st_mode = mode;
+    auto st_mode = static_cast<unsigned short>(mode);
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
                  libssh2_session_set_blocking(libssh2_session_ptr, 1));
     REQUIRE_CALL(async_ssh::test::libssh2_api_mock_instance,
